@@ -375,12 +375,24 @@ async function cargarSelectUsuarios() {
 
 const btnDescargar = document.querySelector("#btnDescargarPdf")
 
-btnDescargar.addEventListener("click",async ()=> {
+if (btnDescargar) {
+    btnDescargar.addEventListener("click", () => {
+        const usuario = document.querySelector("#pdf_usuario")
+        const proyecto = document.querySelector("#pdf_proyecto")
+        const fechaInicio = document.querySelector("#pdf_fecha_inicio")
+        const fechaFin = document.querySelector("#pdf_fecha_fin")
 
-    const usuario = document.querySelector("#pdf_usuario")
-    const proyecto = document.querySelector("#pdf_proyecto")
+        if (!usuario.value || !proyecto.value || !fechaInicio.value || !fechaFin.value) {
+            alert("Por favor rellena todos los campos (Usuario, Proyecto y Fechas).");
+            return;
+        }
 
-    const response =await fetch(`pdf/informe-tareas?user=${usuario.value}&proyecto=${proyecto.value}`)
-
-    const data = await response.json()
-})
+        const url = `/pdf/informe-tareas?user=${usuario.value}&proyecto=${proyecto.value}&fecha_inicio=${fechaInicio.value}&fecha_fin=${fechaFin.value}`;
+        
+        // Abrir PDF en una pestaña nueva
+        window.open(url, "_blank");
+        
+        // Cerrar modal
+        $("#modalGenerarPdf").modal("hide");
+    });
+}

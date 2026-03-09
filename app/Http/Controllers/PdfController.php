@@ -21,12 +21,13 @@ class PdfController extends Controller
         $proyecto = Proyecto::findOrFail($request->proyecto);
         $usuario = User::findOrFail($request->user);
 
-        // Calcular rango de fechas
-        $fechaDesde = $tareas->isNotEmpty()
-            ? \Carbon\Carbon::parse($tareas->first()->tiempo_inicio)->format('d/m/Y')
+        // Usar las fechas enviadas desde el frontend para la cabecera
+        $fechaDesde = $request->fecha_inicio 
+            ? \Carbon\Carbon::parse($request->fecha_inicio)->format('d/m/Y') 
             : '-';
-        $fechaHasta = $tareas->isNotEmpty()
-            ? \Carbon\Carbon::parse($tareas->last()->tiempo_fin)->format('d/m/Y')
+            
+        $fechaHasta = $request->fecha_fin 
+            ? \Carbon\Carbon::parse($request->fecha_fin)->format('d/m/Y') 
             : '-';
 
         $pdf = Pdf::loadView('pdf.informe-tareas', [

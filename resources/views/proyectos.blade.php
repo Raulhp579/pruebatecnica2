@@ -179,15 +179,26 @@
                 </div>
 
                 <div class="modal-body">
-
-                    <div class="form-group mb-3">
-                        <label for="pdf_proyecto" class="form-label fw-bold">Proyecto</label>
-                        <select id="pdf_proyecto" class="form-control">
-                            <option value="">Seleccione un proyecto...</option>
-                            @foreach ($proyectos as $proyecto)
-                                <option value="{{ $proyecto->id }}">{{ $proyecto->nombre }}</option>
-                            @endforeach
-                        </select>
+                    
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="pdf_usuario" class="form-label fw-bold">Usuario</label>
+                            <select id="pdf_usuario" class="form-control">
+                                <option value="">Seleccione un usuario...</option>
+                                @foreach ($usuarios as $usuario)
+                                    <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="pdf_proyecto" class="form-label fw-bold">Proyecto</label>
+                            <select id="pdf_proyecto" class="form-control">
+                                <option value="">Seleccione un proyecto...</option>
+                                @foreach ($proyectos as $proyecto)
+                                    <option value="{{ $proyecto->id }}">{{ $proyecto->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div class="row">
