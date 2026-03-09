@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Tarea;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class TareaController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $tareas = Tarea::with('proyecto')->get();
+        return response()->json($tareas);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $tarea = new Tarea();
+        $tarea->descripcion = $request->descripcion;
+        $tarea->tiempo_inicio = $request->tiempo_inicio;
+        $tarea->tiempo_fin = $request->tiempo_fin;
+        $tarea->proyecto_id = $request->proyecto_id;
+        $tarea->id_user = auth()->id();
+        
+        $tarea->save();
+        return response()->json(["message" => "Tarea creada exitosamente", "tarea" => $tarea], 201);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $tarea = Tarea::find($id);
+        if(!$tarea){
+            return response()->json(["message"=> "tarea no encontrada"],404);
+        }
+        return response()->json($tarea);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $tarea = Tarea::find($id);
+        if(!$tarea){
+            return response()->json(["message"=> "tarea no encontrada"],404);
+        }
+        
+        $tarea->descripcion = $request->descripcion;
+        $tarea->tiempo_inicio = $request->tiempo_inicio;
+        $tarea->tiempo_fin = $request->tiempo_fin;
+        $tarea->proyecto_id = $request->proyecto_id;
+        
+        $tarea->save();
+        return response()->json(["message" => "Tarea actualizada exitosamente", "tarea" => $tarea]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $tarea = Tarea::find($id);
+        if(!$tarea){
+            return response()->json(["message"=> "tarea no encontrada"],404);
+        }
+
+        $tarea->delete();
+
+        return response()->json(["message"=> "tarea borrada exitosamente"],200);
+    }
+}
