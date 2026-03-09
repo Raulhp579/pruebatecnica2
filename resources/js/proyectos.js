@@ -9,7 +9,7 @@ let usuarioFiltradoId = null;
 
 // Helper: obtener el token CSRF de la meta tag
 function csrfToken() {
-    return document.querySelector('meta[name="csrf-token"]')?.content || '';
+    return document.querySelector('meta[name="csrf-token"]')?.content || "";
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -59,12 +59,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Cargar Tareas: filtra por proyecto y/o usuario si hay filtros activos
         events: async function (info, successCallback, failureCallback) {
             try {
-                const res = await fetch("/api/tarea");
+                const res = await fetch("/api/tarea", {
+                    headers: {
+                        "X-CSRF-TOKEN": csrfToken(),
+                    },
+                });
                 const tareas = await res.json();
 
                 const tareasFiltradas = tareas.filter((t) => {
-                    const porProyecto = !proyectoFiltradoId || t.proyecto_id == proyectoFiltradoId;
-                    const porUsuario = !usuarioFiltradoId || t.id_user == usuarioFiltradoId;
+                    const porProyecto =
+                        !proyectoFiltradoId ||
+                        t.proyecto_id == proyectoFiltradoId;
+                    const porUsuario =
+                        !usuarioFiltradoId || t.id_user == usuarioFiltradoId;
                     return porProyecto && porUsuario;
                 });
 
@@ -87,61 +94,26 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         },
 
-        // Click en un evento: muestra las tareas de ese proyecto
-        eventClick: async function (info) {
-            const proyectoId = info.event.extendedProps.proyecto_id;
-            const proyectoNombre = info.event.extendedProps.proyecto_nombre;
+        // Click en un evento: abrir modal para editar/eliminar esa tarea
+        eventClick: function (info) {
+            const tareaId = info.event.id;
+            const descripcion = info.event.extendedProps.descripcion || "";
+            const proyectoNombre =
+                info.event.extendedProps.proyecto_nombre || info.event.title;
+            const inicio = info.event.start;
+            const fin = info.event.end;
 
-            document.getElementById(
-                "modal_proyecto_nombre_titulo",
-            ).textContent = proyectoNombre;
-            document.getElementById("listaTareasModal").innerHTML =
-                '<p class="text-muted text-center"><i class="fas fa-spinner fa-spin"></i> Cargando tareas...</p>';
+            document.getElementById("edit_t_id").value = tareaId;
+            document.getElementById("edit_t_proyecto_nombre").value =
+                proyectoNombre;
+            document.getElementById("edit_t_descripcion").value = descripcion;
+            document.getElementById("edit_t_inicio").value =
+                formatDateLocal(inicio);
+            document.getElementById("edit_t_fin").value = fin
+                ? formatDateLocal(fin)
+                : formatDateLocal(inicio);
 
-            $("#modalVerTareas").modal("show");
-
-            try {
-                const res = await fetch("/api/tarea");
-                const todasLasTareas = await res.json();
-                const tareasDelProyecto = todasLasTareas.filter(
-                    (t) => t.proyecto_id == proyectoId,
-                );
-
-                if (tareasDelProyecto.length === 0) {
-                    document.getElementById("listaTareasModal").innerHTML =
-                        '<p class="text-muted text-center">No hay tareas registradas para este proyecto.</p>';
-                    return;
-                }
-
-                let html = '<ul class="list-group list-group-flush">';
-                tareasDelProyecto.forEach((t) => {
-                    const inicio = t.tiempo_inicio
-                        ? new Date(t.tiempo_inicio).toLocaleString("es-ES", {
-                              dateStyle: "short",
-                              timeStyle: "short",
-                          })
-                        : "-";
-                    const fin = t.tiempo_fin
-                        ? new Date(t.tiempo_fin).toLocaleString("es-ES", {
-                              dateStyle: "short",
-                              timeStyle: "short",
-                          })
-                        : "-";
-                    html += `<li class="list-group-item">
-                        <div class="d-flex justify-content-between">
-                            <span class="badge badge-success mr-2 mt-1">${inicio}</span>
-                            <span class="text-muted small"> &rarr; ${fin}</span>
-                        </div>
-                        ${t.descripcion ? '<p class="mb-0 mt-1 text-secondary">' + t.descripcion + "</p>" : ""}
-                    </li>`;
-                });
-                html += "</ul>";
-
-                document.getElementById("listaTareasModal").innerHTML = html;
-            } catch (e) {
-                document.getElementById("listaTareasModal").innerHTML =
-                    '<p class="text-danger">Error al cargar las tareas.</p>';
-            }
+            $("#modalEditarTarea").modal("show");
         },
 
         // Cuando soltamos un Draggable (Proyecto) dentro del calendario
@@ -192,16 +164,19 @@ function formatDateLocal(date) {
 }
 
 // FUNCIÓN PARA CARGAR LA LISTA LATERAL DE PROYECTOS Y HACERLOS ARRASTRABLES
-async function                    cargarListaProyectos() {
+async function cargarListaProyectos() {
     try {
-        const response = await fetch("/api/proyecto");
+        const response = await fetch("/api/proyecto", {
+            headers: {
+                "X-CSRF-TOKEN": csrfToken(),
+            },
+        });
         const data = await response.json();
 
         const contenedor = document.getElementById(
             "listaProyectosArrastrables",
         );
         contenedor.innerHTML = "";
-
 
         if (data.length === 0) {
             contenedor.innerHTML =
@@ -233,7 +208,12 @@ async function                    cargarListaProyectos() {
                         // Quitar resaltado de todas las tarjetas
                         document
                             .querySelectorAll(".proyecto-draggable")
-                            .forEach((el) => el.classList.remove("opacity-50", "border-warning"));
+                            .forEach((el) =>
+                                el.classList.remove(
+                                    "opacity-50",
+                                    "border-warning",
+                                ),
+                            );
                         div.classList.remove("border-4", "border-white");
                     } else {
                         // Primer click: activar filtro
@@ -343,10 +323,78 @@ if (btnGuardarTarea) {
     });
 }
 
+// ACTUALIZAR TAREA DESDE MODAL
+const btnActualizarTarea = document.getElementById("btnActualizarTarea");
+if (btnActualizarTarea) {
+    btnActualizarTarea.addEventListener("click", async function () {
+        const id = document.getElementById("edit_t_id").value;
+        const tareaData = {
+            descripcion: document.getElementById("edit_t_descripcion").value,
+            tiempo_inicio: document.getElementById("edit_t_inicio").value,
+            tiempo_fin: document.getElementById("edit_t_fin").value,
+        };
+
+        try {
+            const response = await fetch(`/api/tarea/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken(),
+                },
+                body: JSON.stringify(tareaData),
+            });
+
+            if (response.ok) {
+                $("#modalEditarTarea").modal("hide");
+                if (window.miCalendario) window.miCalendario.refetchEvents();
+                document.getElementById("formEditarTarea").reset();
+            } else {
+                alert("Error al actualizar la tarea.");
+            }
+        } catch (error) {
+            console.error("API Error:", error);
+        }
+    });
+}
+
+// ELIMINAR TAREA DESDE MODAL
+const btnEliminarTarea = document.getElementById("btnEliminarTarea");
+if (btnEliminarTarea) {
+    btnEliminarTarea.addEventListener("click", async function () {
+        if (!confirm("¿Estás seguro de que quieres eliminar esta tarea?"))
+            return;
+
+        const id = document.getElementById("edit_t_id").value;
+
+        try {
+            const response = await fetch(`/api/tarea/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken(),
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.ok) {
+                $("#modalEditarTarea").modal("hide");
+                if (window.miCalendario) window.miCalendario.refetchEvents();
+            } else {
+                alert("Error al eliminar la tarea.");
+            }
+        } catch (error) {
+            console.error("API Error:", error);
+        }
+    });
+}
+
 // CARGAR USUARIOS EN EL SELECT DEL CALENDARIO
 async function cargarSelectUsuarios() {
     try {
-        const res = await fetch("/api/user");
+        const res = await fetch("/api/user", {
+            headers: {
+                "X-CSRF-TOKEN": csrfToken(),
+            },
+        });
         const usuarios = await res.json();
 
         const sel = document.getElementById("filtroUsuarioCalendario");
@@ -373,25 +421,32 @@ async function cargarSelectUsuarios() {
     }
 }
 
-const btnDescargar = document.querySelector("#btnDescargarPdf")
+const btnDescargar = document.querySelector("#btnDescargarPdf");
 
 if (btnDescargar) {
     btnDescargar.addEventListener("click", () => {
-        const usuario = document.querySelector("#pdf_usuario")
-        const proyecto = document.querySelector("#pdf_proyecto")
-        const fechaInicio = document.querySelector("#pdf_fecha_inicio")
-        const fechaFin = document.querySelector("#pdf_fecha_fin")
+        const usuario = document.querySelector("#pdf_usuario");
+        const proyecto = document.querySelector("#pdf_proyecto");
+        const fechaInicio = document.querySelector("#pdf_fecha_inicio");
+        const fechaFin = document.querySelector("#pdf_fecha_fin");
 
-        if (!usuario.value || !proyecto.value || !fechaInicio.value || !fechaFin.value) {
-            alert("Por favor rellena todos los campos (Usuario, Proyecto y Fechas).");
+        if (
+            !usuario.value ||
+            !proyecto.value ||
+            !fechaInicio.value ||
+            !fechaFin.value
+        ) {
+            alert(
+                "Por favor rellena todos los campos (Usuario, Proyecto y Fechas).",
+            );
             return;
         }
 
         const url = `/pdf/informe-tareas?user=${usuario.value}&proyecto=${proyecto.value}&fecha_inicio=${fechaInicio.value}&fecha_fin=${fechaFin.value}`;
-        
+
         // Abrir PDF en una pestaña nueva
         window.open(url, "_blank");
-        
+
         // Cerrar modal
         $("#modalGenerarPdf").modal("hide");
     });

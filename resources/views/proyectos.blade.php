@@ -136,27 +136,49 @@
         </div>
     </div>
 
-    <!-- Modal Ver Tareas del Proyecto (Click en evento del calendario) -->
-    <div class="modal fade" id="modalVerTareas" tabindex="-1" role="dialog" aria-labelledby="modalVerTareasLabel"
+    <!-- Modal Editar/Eliminar Tarea (Click en evento del calendario) -->
+    <div class="modal fade" id="modalEditarTarea" tabindex="-1" role="dialog" aria-labelledby="modalEditarTareaLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="modalVerTareasLabel">
-                        <i class="fas fa-tasks mr-1"></i> Tareas del Proyecto: <span
-                            id="modal_proyecto_nombre_titulo"></span>
-                    </h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="modalEditarTareaLabel">Editar/Eliminar Tarea</h5>
+                    <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="listaTareasModal">
-                        <p class="text-muted text-center"><i class="fas fa-spinner fa-spin"></i> Cargando tareas...</p>
-                    </div>
+                    <form id="formEditarTarea">
+                        <input type="hidden" id="edit_t_id">
+
+                        <div class="form-group">
+                            <label>Proyecto</label>
+                            <input type="text" class="form-control" id="edit_t_proyecto_nombre" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit_t_descripcion">Descripción</label>
+                            <textarea class="form-control" id="edit_t_descripcion" rows="2"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 form-group">
+                                <label for="edit_t_inicio">Inicio</label>
+                                <input type="datetime-local" class="form-control" id="edit_t_inicio" required>
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="edit_t_fin">Fin</label>
+                                <input type="datetime-local" class="form-control" id="edit_t_fin" required>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-danger" id="btnEliminarTarea">Eliminar Tarea</button>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="btnActualizarTarea">Guardar Cambios</button>
+                    </div>
                 </div>
             </div>
         </div>
