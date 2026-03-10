@@ -434,12 +434,14 @@ if (btnDescargar) {
         const proyecto = document.querySelector("#pdf_proyecto");
         const fechaInicio = document.querySelector("#pdf_fecha_inicio");
         const fechaFin = document.querySelector("#pdf_fecha_fin");
+        const prioridad = document.querySelector("#prioridad")
 
         if (
             !usuario.value ||
             !proyecto.value ||
             !fechaInicio.value ||
-            !fechaFin.value
+            !fechaFin.value||
+            !prioridad.value
         ) {
             alert(
                 "Por favor rellena todos los campos (Usuario, Proyecto y Fechas).",
@@ -447,7 +449,7 @@ if (btnDescargar) {
             return;
         }
 
-        const url = `/pdf/informe-tareas?user=${usuario.value}&proyecto=${proyecto.value}&fecha_inicio=${fechaInicio.value}&fecha_fin=${fechaFin.value}`;
+        const url = `/pdf/informe-tareas?user=${usuario.value}&proyecto=${proyecto.value}&fecha_inicio=${fechaInicio.value}&fecha_fin=${fechaFin.value}&prioridad=${prioridad.value}`;
 
         // Abrir PDF en una pestaña nueva
         window.open(url, "_blank");

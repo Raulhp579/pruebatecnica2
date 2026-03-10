@@ -254,6 +254,18 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="prioridad " class="form-label fw-bold" >Filtrar por prioridad</label>
+                            <select name="prioridad" id="prioridad" class="form-control">
+                                <option value="0">Todas</option>
+                                <option value="1">ALTAS</option>
+                                <option value="2">MEDIAS</option>
+                                <option value="3">BAJAS</option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -280,5 +292,5 @@
 
 @section('js')
     @vite(['resources/js/proyectos.js','resources/js/echo.js'])
-    
+
 @stop

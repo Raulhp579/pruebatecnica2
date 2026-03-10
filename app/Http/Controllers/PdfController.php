@@ -12,12 +12,22 @@ class PdfController extends Controller
 {
     public function generarPdf(Request $request)
     {
-        $tareas = Tarea::where('id_user', $request->user)
+        if($request->prioridad == 0){
+            $tareas = Tarea::where('id_user', $request->user)
             ->where('proyecto_id', $request->proyecto)
             ->whereDate('tiempo_inicio', '>=', $request->fecha_inicio)
             ->whereDate('tiempo_fin', '<=', $request->fecha_fin)
             ->orderBy("prioridad", 'ASC')
             ->get();
+        }else{
+            $tareas = Tarea::where('id_user', $request->user)
+            ->where('proyecto_id', $request->proyecto)
+            ->whereDate('tiempo_inicio', '>=', $request->fecha_inicio)
+            ->whereDate('tiempo_fin', '<=', $request->fecha_fin)
+            ->where("prioridad",$request->prioridad)
+            ->get();
+        }
+
 
         $proyecto = Proyecto::findOrFail($request->proyecto);
         $usuario = User::findOrFail($request->user);

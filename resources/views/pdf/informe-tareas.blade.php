@@ -217,7 +217,15 @@
                     <td>{{ $fin->format('d/m/Y H:i') }}</td>
                     <td>{{ $min }}</td>
                     <td>{{ $usuario->name }}</td>
-                    <td>{{$tarea->prioridad}}</td>
+                    @if($tarea->prioridad == 1)
+                        <td>ALTA</td>
+                    @endif
+                    @if($tarea->prioridad == 2)
+                        <td>MEDIA</td>
+                    @endif
+                    @if($tarea->prioridad == 3)
+                        <td>BAJA</td>
+                    @endif
                     <td class="td-descripcion">{{ $tarea->descripcion ?? '-' }}</td>
 
                 </tr>
