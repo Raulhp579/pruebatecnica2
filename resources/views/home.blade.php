@@ -22,10 +22,12 @@
 @stop
 
 @section('footer')
-    <div class="float-right d-none d-sm-block">
+    <div class="float-right d-none d-sm-block ">
         <b>Versión</b> 1.0.0
     </div>
-    <strong>Copyright &copy; {{ date('Y') }} <a href="#">Prueba Técnica SIMJ</a></strong>
+    <div class="d-flex justify-content-center">
+        <strong>Copyright &copy; {{ date('Y') }} <a href="#">Prueba Técnica SIMJ</a></strong>
+    </div>
 @stop
 
 @section('css')
