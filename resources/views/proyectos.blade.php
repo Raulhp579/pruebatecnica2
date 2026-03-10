@@ -136,54 +136,56 @@
         </div>
     </div>
 
-    <!-- Modal Editar/Eliminar Tarea (Click en evento del calendario) -->
-    <div class="modal fade" id="modalEditarTarea" tabindex="-1" role="dialog" aria-labelledby="modalEditarTareaLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-warning">
-                    <h5 class="modal-title" id="modalEditarTareaLabel">Editar/Eliminar Tarea</h5>
-                    <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="formEditarTarea">
-                        <input type="hidden" id="edit_t_id">
+    @if (Auth::user()->administrador)
+        <!-- Modal Editar/Eliminar Tarea (Click en evento del calendario) -->
+        <div class="modal fade" id="modalEditarTarea" tabindex="-1" role="dialog"
+            aria-labelledby="modalEditarTareaLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="modalEditarTareaLabel">Editar/Eliminar Tarea</h5>
+                        <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formEditarTarea">
+                            <input type="hidden" id="edit_t_id">
 
-                        <div class="form-group">
-                            <label>Proyecto</label>
-                            <input type="text" class="form-control" id="edit_t_proyecto_nombre" disabled>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="edit_t_descripcion">Descripción</label>
-                            <textarea class="form-control" id="edit_t_descripcion" rows="2"></textarea>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-6 form-group">
-                                <label for="edit_t_inicio">Inicio</label>
-                                <input type="datetime-local" class="form-control" id="edit_t_inicio" required>
+                            <div class="form-group">
+                                <label>Proyecto</label>
+                                <input type="text" class="form-control" id="edit_t_proyecto_nombre" disabled>
                             </div>
-                            <div class="col-6 form-group">
-                                <label for="edit_t_fin">Fin</label>
-                                <input type="datetime-local" class="form-control" id="edit_t_fin" required>
+
+                            <div class="form-group">
+                                <label for="edit_t_descripcion">Descripción</label>
+                                <textarea class="form-control" id="edit_t_descripcion" rows="2"></textarea>
                             </div>
+
+                            <div class="row">
+                                <div class="col-6 form-group">
+                                    <label for="edit_t_inicio">Inicio</label>
+                                    <input type="datetime-local" class="form-control" id="edit_t_inicio" required>
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label for="edit_t_fin">Fin</label>
+                                    <input type="datetime-local" class="form-control" id="edit_t_fin" required>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <button type="button" class="btn btn-danger" id="btnEliminarTarea">Eliminar Tarea</button>
+                        <div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="btnActualizarTarea">Guardar
+                                Cambios</button>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-danger" id="btnEliminarTarea">Eliminar Tarea</button>
-                    <div>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="btnActualizarTarea">Guardar Cambios</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    @endif
     <!-- Modal Generar PDF -->
     <div class="modal fade" id="modalGenerarPdf" tabindex="-1" role="dialog" aria-labelledby="modalGenerarPdfLabel"
         aria-hidden="true">
@@ -201,7 +203,7 @@
                 </div>
 
                 <div class="modal-body">
-                    
+
                     <div class="row">
                         <div class="col-md-6 form-group mb-3">
                             <label for="pdf_usuario" class="form-label fw-bold">Usuario</label>
