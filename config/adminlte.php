@@ -299,41 +299,22 @@ return [
     */
 
     'menu' => [
-        // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
-            'type' => 'fullscreen-widget',
-            'topnav_right' => true,
-        ],
-
         // Sidebar items:
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
+        ['header' => 'MENU'],
         [
             'text' => 'blog',
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
         [
-            'text' => 'crear usuario',
-            'url' => 'crearUsuario',
-            'icon' => 'far fa-fw fa-file',
-        ],
-        [
             'text'=>'ver usuarios',
             'url'=>'verUsuarios',
-            'icon'=>'far fa-fw fa-eye',
+            'icon'=>'fas fa-fw fa-users',
         ],
         [
             'text'=>'proyectos',
             'url'=>'proyectos',
-            'icon'=>'far fa-fw fa-eye',
+            'icon'=>'fas fa-fw fa-project-diagram',
         ],
 
 
@@ -348,7 +329,7 @@ return [
         [
             'text'=> 'login',
             'url' => 'login',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fas fa-fw fa-user-check',
         ]
 
     ],

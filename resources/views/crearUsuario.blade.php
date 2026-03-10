@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-    <div class="row">
+    <div class="row justify-content-center mt-3">
         <div class="col-md-6">
             <div class="card card-primary">
                 <div class="card-header">
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="button" id="btnCrearUsuario" class="btn btn-primary">Crear Usuario</button>
+                        <button type="button" id="btnCrearUsuario" class="btn btn-primary" {{ route('home') }}>Crear Usuario</button>
                         <a href="/" class="btn btn-default float-right">Cancelar</a>
                     </div>
                 </form>

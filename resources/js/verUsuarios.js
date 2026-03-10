@@ -143,3 +143,37 @@ async function eliminarUsuario(id) {
         console.error("Error al eliminar el usuario:", error);
     }
 }
+
+
+const btnAñadirUsuario = document.querySelector("#btnGuardarUsuario")
+
+btnAñadirUsuario.addEventListener("click", async () => {
+    const usuarioAñadido = {
+        nombre: document.getElementById("add_name").value,
+        correo: document.getElementById("add_email").value,
+        contrasena: document.getElementById("add_password").value,
+        esAdmin: document.getElementById("add_administrador").checked,
+    };
+
+    try {
+        const response = await fetch("/api/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+            body: JSON.stringify(usuarioAñadido),
+        });
+
+        const data = await response.json();
+        console.log("Respuesta al añadir:", data);
+
+        // Escondemos el modal y recargamos la tabla
+        $("#modalAñadirUsuario").modal("hide");
+        cargarUsuarios();
+    } catch (error) {
+        console.error("Error al añadir el usuario:", error);
+    }
+});
