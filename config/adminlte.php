@@ -302,7 +302,7 @@ return [
 
     'menu' => [
         // Sidebar items:
-        ['header' => 'MENU'],
+        ['header' => 'MENÚ'],
         [
             'text' => 'blog',
             'url' => 'admin/blog',
