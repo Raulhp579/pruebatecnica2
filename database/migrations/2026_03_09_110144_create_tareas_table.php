@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('tiempo_fin')->nullable();
             $table->unsignedBigInteger('proyecto_id');
             $table->foreign('proyecto_id')->references('id')->on('proyectos')->onDelete('cascade');
+            $table->integer('prioridad');
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

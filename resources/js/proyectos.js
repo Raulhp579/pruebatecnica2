@@ -7,6 +7,8 @@ let proyectoFiltradoId = null;
 // Variable global para el filtro del calendario por usuario
 let usuarioFiltradoId = null;
 
+let prioridad = null;
+
 // Helper: obtener el token CSRF de la meta tag
 function csrfToken() {
     return document.querySelector('meta[name="csrf-token"]')?.content || "";
@@ -72,7 +74,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                         t.proyecto_id == proyectoFiltradoId;
                     const porUsuario =
                         !usuarioFiltradoId || t.id_user == usuarioFiltradoId;
-                    return porProyecto && porUsuario;
+
+                    const porPrioridad = !prioridad || t.prioridad == prioridad
+                    return porProyecto && porUsuario && porPrioridad;
                 });
 
                 const eventos = tareasFiltradas.map((t) => ({
@@ -294,6 +298,7 @@ if (btnGuardarTarea) {
             descripcion: document.getElementById("t_descripcion").value,
             tiempo_inicio: document.getElementById("t_inicio").value,
             tiempo_fin: document.getElementById("t_fin").value,
+            prioridad: document.querySelector("#t_prioridad").value
         };
 
         try {
@@ -451,3 +456,23 @@ if (btnDescargar) {
         $("#modalGenerarPdf").modal("hide");
     });
 }
+
+
+const selectPrioridad = document.querySelector("#filtroPrioridad")
+
+selectPrioridad.addEventListener("change", () =>{
+    prioridad = selectPrioridad.value || null
+    if(window.miCalendario){
+        window.miCalendario.refetchEvents()
+    }
+
+
+})
+
+
+/* sel.addEventListener("change", () => {
+            usuarioFiltradoId = sel.value || null;
+            if (window.miCalendario) {
+                window.miCalendario.refetchEvents();
+            }
+        }); */

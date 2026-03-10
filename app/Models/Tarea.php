@@ -15,7 +15,8 @@ class Tarea extends Model
         'tiempo_inicio',
         'tiempo_fin',
         'proyecto_id',
-        'id_user'
+        'id_user',
+        'prioridad'
     ];
 
     // Relación: Una tarea pertenece a un proyecto

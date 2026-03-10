@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tarea;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,10 +12,20 @@ class TareaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tareas = Tarea::with('proyecto')->get();
-        return response()->json($tareas);
+        try{
+            if(isset($request->prioridad)){
+                return response()->json(Tarea::where("prioridad",$request->prioridad));
+            }
+            $tareas = Tarea::with('proyecto')->get();
+            return response()->json($tareas);
+        }catch(Exception $e){
+            return response()->json([
+                "error"=>"no se han podido cargar las tareas",
+                "fail"=>$e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -27,8 +38,9 @@ class TareaController extends Controller
         $tarea->tiempo_inicio = $request->tiempo_inicio;
         $tarea->tiempo_fin = $request->tiempo_fin;
         $tarea->proyecto_id = $request->proyecto_id;
+        $tarea->prioridad = $request->prioridad;
         $tarea->id_user = auth()->id();
-        
+
         $tarea->save();
         return response()->json(["message" => "Tarea creada exitosamente", "tarea" => $tarea], 201);
     }
@@ -54,12 +66,12 @@ class TareaController extends Controller
         if(!$tarea){
             return response()->json(["message"=> "tarea no encontrada"],404);
         }
-        
+
         $tarea->descripcion = $request->descripcion;
         $tarea->tiempo_inicio = $request->tiempo_inicio;
         $tarea->tiempo_fin = $request->tiempo_fin;
         $tarea->proyecto_id = $request->proyecto_id;
-        
+
         $tarea->save();
         return response()->json(["message" => "Tarea actualizada exitosamente", "tarea" => $tarea]);
     }

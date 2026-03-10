@@ -199,6 +199,7 @@
                 <th style="width:50px;">MIN.</th>
                 <th>USUARIO</th>
                 <th>TAREA REALIZADA</th>
+                <th>PRIORIDAD</th>
             </tr>
         </thead>
         <tbody>
@@ -216,7 +217,9 @@
                     <td>{{ $fin->format('d/m/Y H:i') }}</td>
                     <td>{{ $min }}</td>
                     <td>{{ $usuario->name }}</td>
+                    <td>{{$tarea->prioridad}}</td>
                     <td class="td-descripcion">{{ $tarea->descripcion ?? '-' }}</td>
+
                 </tr>
             @empty
                 <tr>

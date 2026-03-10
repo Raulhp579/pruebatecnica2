@@ -16,18 +16,19 @@ class PdfController extends Controller
             ->where('proyecto_id', $request->proyecto)
             ->whereDate('tiempo_inicio', '>=', $request->fecha_inicio)
             ->whereDate('tiempo_fin', '<=', $request->fecha_fin)
+            ->orderBy("prioridad", 'ASC')
             ->get();
 
         $proyecto = Proyecto::findOrFail($request->proyecto);
         $usuario = User::findOrFail($request->user);
 
         // Usar las fechas enviadas desde el frontend para la cabecera
-        $fechaDesde = $request->fecha_inicio 
-            ? \Carbon\Carbon::parse($request->fecha_inicio)->format('d/m/Y') 
+        $fechaDesde = $request->fecha_inicio
+            ? \Carbon\Carbon::parse($request->fecha_inicio)->format('d/m/Y')
             : '-';
-            
-        $fechaHasta = $request->fecha_fin 
-            ? \Carbon\Carbon::parse($request->fecha_fin)->format('d/m/Y') 
+
+        $fechaHasta = $request->fecha_fin
+            ? \Carbon\Carbon::parse($request->fecha_fin)->format('d/m/Y')
             : '-';
 
         $pdf = Pdf::loadView('pdf.informe-tareas', [

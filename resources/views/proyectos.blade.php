@@ -46,6 +46,14 @@
                             <option value="">Todos los usuarios</option>
                         </select>
                     </div>
+                    <div class="ml-auto" style="min-width:200px">
+                        <select id="filtroPrioridad" class="form-control form-control-sm">
+                            <option value="0">Todas la prioridades</option>
+                            <option value="1">ALTA</option>
+                            <option value="2">MEDIA</option>
+                            <option value="3">BAJA</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="card-body">
                     <!-- ESPACIO RESERVADO PARA EL CALENDARIO -->
@@ -114,6 +122,15 @@
                         <div class="form-group">
                             <label for="t_descripcion">Descripción</label>
                             <textarea class="form-control" id="t_descripcion" rows="2"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="t_prioridad">prioridad</label>
+                            <select name="t_prioridad" id="t_prioridad">
+                                <option value="1">ALTA</option>
+                                <option value="2">MEDIA</option>
+                                <option value="3">BAJA</option>
+                            </select>
                         </div>
 
                         <div class="row">
