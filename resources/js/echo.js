@@ -17,10 +17,14 @@ window.Echo = new Echo({
 window.Pusher.logToConsole = true;
 
 
+
+const idUser = document.querySelector("#idUsuario").dataset.userId
+
 window.Echo.channel("crearTarea")
     .listen('.create', (data)=>{
-        alert("tarea creada")
-        console.log(data)
+            if(idUser == data){
+                alert("Se te ha asignado una nueva tarea")
+            }
     })
 
 

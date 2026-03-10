@@ -298,9 +298,11 @@ if (btnGuardarTarea) {
             descripcion: document.getElementById("t_descripcion").value,
             tiempo_inicio: document.getElementById("t_inicio").value,
             tiempo_fin: document.getElementById("t_fin").value,
-            prioridad: document.querySelector("#t_prioridad").value
+            prioridad: document.querySelector("#t_prioridad").value,
+            id_user: document.querySelector("#asignado").value
         };
 
+        console.log(tareaData)
         try {
             const response = await fetch("/api/tarea", {
                 method: "POST",

@@ -43,7 +43,7 @@ class TareaCreate  implements ShouldBroadcastNow
     public function broadcastWith(): array
     {
         return [
-            "message" => "[{$this->post}] nueva tarea agregada"
+            $this->post->id_user
         ];
     }
 }

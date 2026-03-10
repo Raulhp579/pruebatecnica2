@@ -2,6 +2,8 @@
 
 @section('title', 'Proyectos')
 
+<meta id="idUsuario" data-user-id={{ auth()->user()->id }}>
+
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Gestión de Proyectos</h1>
@@ -130,6 +132,15 @@
                                 <option value="1">ALTA</option>
                                 <option value="2">MEDIA</option>
                                 <option value="3">BAJA</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="asignado">prioridad</label>
+                            <select name="asignado" id="asignado">
+                                @foreach ($usuarios as $usuario)
+                                    <option value={{$usuario->id}} >{{$usuario->name}}</option>
+                                @endforeach
                             </select>
                         </div>
 

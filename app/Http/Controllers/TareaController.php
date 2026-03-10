@@ -40,7 +40,7 @@ class TareaController extends Controller
         $tarea->tiempo_fin = $request->tiempo_fin;
         $tarea->proyecto_id = $request->proyecto_id;
         $tarea->prioridad = $request->prioridad;
-        $tarea->id_user = Auth::user()->id;
+        $tarea->id_user = $request->id_user;
 
         $tarea->save();
 
