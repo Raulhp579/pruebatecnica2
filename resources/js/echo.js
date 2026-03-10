@@ -12,3 +12,17 @@ window.Echo = new Echo({
     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
 });
+
+
+window.Pusher.logToConsole = true;
+
+
+window.Echo.channel("crearTarea")
+    .listen('.create', (data)=>{
+        alert("tarea creada")
+        console.log(data)
+    })
+
+
+
+

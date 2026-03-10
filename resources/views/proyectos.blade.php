@@ -279,6 +279,6 @@
 @stop
 
 @section('js')
-    {{-- Cuando crees tu archivo JS para los proyectos, mételo aquí por vite --}}
-    @vite(['resources/js/proyectos.js'])
+    @vite(['resources/js/proyectos.js','resources/js/echo.js'])
+    
 @stop

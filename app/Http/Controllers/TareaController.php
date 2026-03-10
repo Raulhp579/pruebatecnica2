@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TareaCreate;
 use App\Models\Tarea;
 use Exception;
 use Illuminate\Http\Request;
@@ -39,10 +40,14 @@ class TareaController extends Controller
         $tarea->tiempo_fin = $request->tiempo_fin;
         $tarea->proyecto_id = $request->proyecto_id;
         $tarea->prioridad = $request->prioridad;
-        $tarea->id_user = auth()->id();
+        $tarea->id_user = Auth::user()->id;
 
         $tarea->save();
-        return response()->json(["message" => "Tarea creada exitosamente", "tarea" => $tarea], 201);
+
+        event(new TareaCreate($tarea));
+        return response()->json([
+            "success"=>"la tarea se ha creado correctamente"
+        ]);
     }
 
     /**

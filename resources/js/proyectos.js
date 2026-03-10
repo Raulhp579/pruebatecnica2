@@ -469,10 +469,3 @@ selectPrioridad.addEventListener("change", () =>{
 
 })
 
-
-/* sel.addEventListener("change", () => {
-            usuarioFiltradoId = sel.value || null;
-            if (window.miCalendario) {
-                window.miCalendario.refetchEvents();
-            }
-        }); */
