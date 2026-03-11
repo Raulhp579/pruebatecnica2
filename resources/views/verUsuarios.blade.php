@@ -1,9 +1,14 @@
 @extends('adminlte::page')
 
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css"><!-- le he metido el css de la pagina que venia ya -->
+
 @section('title', 'Ver Usuarios')
 
 @section('content_header')
-    <h1>Lista de Usuarios</h1>
+    <div class="d-flex justify-content-between">
+        <h1 class="">Lista de Usuarios</h1>
+
+    </div>
 @stop
 
 @section('content')
@@ -13,21 +18,21 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h3 class="card-title">Usuarios Registrados</h3>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAñadirUsuario">
+                        <button type="button" class="btn btn-success" data-toggle="modal"
+                            data-target="#modalAñadirUsuario">
                             <i class="fas fa-plus"></i> Añadir Usuario
                         </button>
                     </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap table-striped">
+                    <table class="table table-hover text-nowrap table-striped" id="tablaUsuarios">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Correo Electrónico</th>
                                 <th>¿Es Administrador?</th>
-                                <th>Fecha de Registro</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -47,7 +52,8 @@
     </div>
 
     <!-- Modal de Edición de Usuario -->
-    <div class="modal fade" id="modalEditarUsuario" tabindex="-1" role="dialog" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEditarUsuario" tabindex="-1" role="dialog" aria-labelledby="modalEditarUsuarioLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
@@ -59,22 +65,22 @@
                 <div class="modal-body">
                     <form id="formEditarUsuario">
                         <input type="hidden" id="edit_id">
-                        
+
                         <div class="form-group">
                             <label for="edit_name">Nombre</label>
                             <input type="text" class="form-control" id="edit_name" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="edit_email">Correo Electrónico</label>
                             <input type="email" class="form-control" id="edit_email" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="edit_password">Contraseña (Dejar en blanco para no cambiarla)</label>
                             <input type="password" class="form-control" id="edit_password" placeholder="••••••••">
                         </div>
-                        
+
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
                                 <input type="checkbox" class="custom-control-input" id="edit_administrador" value="1">
@@ -92,7 +98,8 @@
     </div>
 
     <!--modal añadir usuario -->
-    <div class="modal fade" id="modalAñadirUsuario" tabindex="-1" role="dialog" aria-labelledby="modalAñadirUsuarioLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAñadirUsuario" tabindex="-1" role="dialog" aria-labelledby="modalAñadirUsuarioLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
@@ -104,25 +111,26 @@
                 <div class="modal-body">
                     <form id="formAñadirUsuario">
                         <input type="hidden" id="edit_id">
-                        
+
                         <div class="form-group">
                             <label for="add_name">Nombre</label>
                             <input type="text" class="form-control" id="add_name" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="add_email">Correo Electrónico</label>
                             <input type="email" class="form-control" id="add_email" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="add_password">Contraseña</label>
                             <input type="password" class="form-control" id="add_password" placeholder="••••••••">
                         </div>
-                        
+
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                <input type="checkbox" class="custom-control-input" id="add_administrador" value="1">
+                                <input type="checkbox" class="custom-control-input" id="add_administrador"
+                                    value="1">
                                 <label class="custom-control-label" for="add_administrador">¿Es Administrador?</label>
                             </div>
                         </div>

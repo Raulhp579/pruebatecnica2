@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const porUsuario =
                         !usuarioFiltradoId || t.id_user == usuarioFiltradoId;
 
-                    const porPrioridad = !prioridad || t.prioridad == prioridad
+                    const porPrioridad = !prioridad || t.prioridad == prioridad;
                     return porProyecto && porUsuario && porPrioridad;
                 });
 
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 ? formatDateLocal(fin)
                 : formatDateLocal(inicio);
 
-            $("#modalEditarTarea").modal("show");
+            window.$("#modalEditarTarea").modal("show");
         },
 
         // Cuando soltamos un Draggable (Proyecto) dentro del calendario
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.miCalendario = calendar;
 
             // Abrimos el modal de Bootstrap
-            $("#modalCrearTarea").modal("show");
+            window.$("#modalCrearTarea").modal("show");
         },
     });
 
@@ -276,7 +276,7 @@ if (btnGuardarProyecto) {
             });
 
             if (response.ok) {
-                $("#modalCrearProyecto").modal("hide");
+                window.$("#modalCrearProyecto").modal("hide");
                 document.getElementById("formCrearProyecto").reset();
                 // Recargar lista lateral
                 await cargarListaProyectos();
@@ -299,10 +299,10 @@ if (btnGuardarTarea) {
             tiempo_inicio: document.getElementById("t_inicio").value,
             tiempo_fin: document.getElementById("t_fin").value,
             prioridad: document.querySelector("#t_prioridad").value,
-            id_user: document.querySelector("#asignado").value
+            id_user: document.querySelector("#asignado").value,
         };
 
-        console.log(tareaData)
+        console.log(tareaData);
         try {
             const response = await fetch("/api/tarea", {
                 method: "POST",
@@ -314,7 +314,7 @@ if (btnGuardarTarea) {
             });
 
             if (response.ok) {
-                $("#modalCrearTarea").modal("hide");
+                window.$("#modalCrearTarea").modal("hide");
                 document.getElementById("formCrearTarea").reset();
 
                 // Recargar eventos en el calendario
@@ -352,7 +352,7 @@ if (btnActualizarTarea) {
             });
 
             if (response.ok) {
-                $("#modalEditarTarea").modal("hide");
+                window.$("#modalEditarTarea").modal("hide");
                 if (window.miCalendario) window.miCalendario.refetchEvents();
                 document.getElementById("formEditarTarea").reset();
             } else {
@@ -383,7 +383,7 @@ if (btnEliminarTarea) {
             });
 
             if (response.ok) {
-                $("#modalEditarTarea").modal("hide");
+                window.$("#modalEditarTarea").modal("hide");
                 if (window.miCalendario) window.miCalendario.refetchEvents();
             } else {
                 alert("Error al eliminar la tarea.");
@@ -436,13 +436,13 @@ if (btnDescargar) {
         const proyecto = document.querySelector("#pdf_proyecto");
         const fechaInicio = document.querySelector("#pdf_fecha_inicio");
         const fechaFin = document.querySelector("#pdf_fecha_fin");
-        const prioridad = document.querySelector("#prioridad")
+        const prioridad = document.querySelector("#prioridad");
 
         if (
             !usuario.value ||
             !proyecto.value ||
             !fechaInicio.value ||
-            !fechaFin.value||
+            !fechaFin.value ||
             !prioridad.value
         ) {
             alert(
@@ -457,18 +457,15 @@ if (btnDescargar) {
         window.open(url, "_blank");
 
         // Cerrar modal
-        $("#modalGenerarPdf").modal("hide");
+        window.$("#modalGenerarPdf").modal("hide");
     });
 }
 
+const selectPrioridad = document.querySelector("#filtroPrioridad");
 
-const selectPrioridad = document.querySelector("#filtroPrioridad")
-
-selectPrioridad.addEventListener("change", () =>{
-    prioridad = selectPrioridad.value || null
-    if(window.miCalendario){
-        window.miCalendario.refetchEvents()
+selectPrioridad.addEventListener("change", () => {
+    prioridad = selectPrioridad.value || null;
+    if (window.miCalendario) {
+        window.miCalendario.refetchEvents();
     }
-
-})
-
+});

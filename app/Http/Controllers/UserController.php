@@ -2,24 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rol;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        try{
+        try {
+            if (isset($request->nombre)) {
+                /*  return response()->json(User::where("name",'LIKE',"%$request->nombre%")->get()); */
+
+                $model = User::query();
+
+                return DataTables::eloquent($model)
+                    ->addColumn('id', 'el id del usuario')
+                    ->addColumn('name', 'el nombre del usuario')
+                    ->addColumn('email', 'el email del usuario')
+                    ->addColumn('administrador', 'si el usuario es administrador')
+                    ->make(false);
+            }
+
             return response()->json(User::all());
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
-                "error"=>"no se han podido mostrar los usuarios",
-                "fail"=>$e->getMessage()
+                'error' => 'no se han podido mostrar los usuarios',
+                'fail' => $e->getMessage(),
             ]);
         }
     }
@@ -29,7 +44,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User();
+        $user = new User;
 
         $user->name = $request->nombre;
         $user->email = $request->correo;
@@ -39,8 +54,8 @@ class UserController extends Controller
         $user->save();
 
         return response()->json([
-            "message"=>"usuario creado correctamente",
-            "user"=>$user
+            'message' => 'usuario creado correctamente',
+            'user' => $user,
         ]);
     }
 
@@ -51,9 +66,9 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if(!$user){
+        if (! $user) {
             return response()->json([
-                "error"=>"usuario no encontrado"
+                'error' => 'usuario no encontrado',
             ]);
 
         }
@@ -68,9 +83,9 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if(!$user){
+        if (! $user) {
             return response()->json([
-                "error"=>"usuario no encontrado"
+                'error' => 'usuario no encontrado',
             ]);
         }
 
@@ -82,8 +97,8 @@ class UserController extends Controller
         $user->save();
 
         return response()->json([
-            "message"=>"usuario actualizado correctamente",
-            "user"=>$user
+            'message' => 'usuario actualizado correctamente',
+            'user' => $user,
         ]);
     }
 
@@ -92,19 +107,27 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::where("id",$id)->first();
+        $user = User::where('id', $id)->first();
 
-        if(!$user){
+        if (! $user) {
             return response()->json([
-                "error"=>"usuario no encontrado"
+                'error' => 'usuario no encontrado',
             ]);
         }
 
         $user->delete();
 
         return response()->json([
-            "message"=>"usuario eliminado correctamente",
-            "user"=>$user
+            'message' => 'usuario eliminado correctamente',
+            'user' => $user,
         ]);
     }
+
+/*     public function pruebaRol(string $id)
+    {
+        $user = User::where('id', $id)->first();
+        $rol = Rol::where("id",1)->first();
+
+        return response()->json($rol->users);
+    } */
 }

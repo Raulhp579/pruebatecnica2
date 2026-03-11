@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProyectoController;
 use App\Http\Controllers\TareaController;
-use App\Http\Controllers\PdfController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\isAdminMiddleware;
 use App\Models\Proyecto;
-use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
@@ -23,21 +24,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+/* Route::middleware(isAdminMiddleware::class)->group(function () {
+    Route::apiResource('api/user', UserController::class);
+}); */
+
 Route::view('/crearUsuario', 'crearUsuario');
 Route::get('verUsuarios', function () {
     return view('verUsuarios');
 });
 
 Route::get('proyectos', function () {
-    return view('proyectos', ["usuarios"=>User::all(), "proyectos"=>Proyecto::all()]);
+    return view('proyectos', ['usuarios' => User::all(), 'proyectos' => Proyecto::all()]);
 });
 
-// Rutas API en web.php para que compartan la sesión y auth() funcione
-Route::apiResource('api/user', UserController::class);
 Route::apiResource('api/proyecto', ProyectoController::class);
 Route::apiResource('api/tarea', TareaController::class);
 
 // PDF
 Route::get('pdf/informe-tareas', [PdfController::class, 'generarPdf'])->name('pdf.informe-tareas');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
+
