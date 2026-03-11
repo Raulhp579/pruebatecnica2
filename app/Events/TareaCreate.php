@@ -20,9 +20,12 @@ class TareaCreate  implements ShouldBroadcastNow
      */
 
     public $post;
+    public $userId;
+
     public function __construct($tarea)
     {
         $this->post = $tarea;
+        $this->userId = $this->post->id_user;
     }
 
     /**
@@ -32,7 +35,8 @@ class TareaCreate  implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('crearTarea');
+        /* return new Channel('crearTarea'); */
+        return new PrivateChannel('crearTarea.'.$this->userId);
     }
 
     public function broadcastAs()
