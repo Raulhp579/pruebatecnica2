@@ -2,23 +2,20 @@
 
 @section('title', 'Proyectos')
 
-<meta id="idUsuario" data-user-id={{ auth()->user()->id }}>
-
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Gestión de Proyectos</h1>
         <!-- Botón para abrir el Modal de Creación (Solo Administradores) -->
-        @if (auth()->check() && auth()->user()->administrador)
-            <div>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCrearProyecto">
-                    <i class="fas fa-plus mr-1"></i> Crear Proyecto
-                </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalGenerarPdf"
-                    id="generarPdf">
-                    <i class="fas fa-plus mr-1"></i> Generar PDF
-                </button>
-            </div>
-        @endif
+
+        <div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCrearProyecto">
+                <i class="fas fa-plus mr-1"></i> Crear Proyecto
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalGenerarPdf" id="generarPdf">
+                <i class="fas fa-plus mr-1"></i> Generar PDF
+            </button>
+        </div>
+
     </div>
 @stop
 
@@ -118,7 +115,7 @@
 
                         <div class="form-group">
                             <label>Proyecto Seleccionado</label>
-                            <input type="text" class="form-control" id="t_proyecto_nombre" disabled>
+                            <input type="text" class="form-control" id="t_proyecto_nombre" >
                         </div>
 
                         <div class="form-group">
@@ -139,7 +136,7 @@
                             <label for="asignado">prioridad</label>
                             <select name="asignado" id="asignado">
                                 @foreach ($usuarios as $usuario)
-                                    <option value={{$usuario->id}} >{{$usuario->name}}</option>
+                                    <option value={{ $usuario->id }}>{{ $usuario->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -164,56 +161,57 @@
         </div>
     </div>
 
-    @if (Auth::user()->administrador)
-        <!-- Modal Editar/Eliminar Tarea (Click en evento del calendario) -->
-        <div class="modal fade" id="modalEditarTarea" tabindex="-1" role="dialog"
-            aria-labelledby="modalEditarTareaLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-warning">
-                        <h5 class="modal-title" id="modalEditarTareaLabel">Editar/Eliminar Tarea</h5>
-                        <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="formEditarTarea">
-                            <input type="hidden" id="edit_t_id">
 
-                            <div class="form-group">
-                                <label>Proyecto</label>
-                                <input type="text" class="form-control" id="edit_t_proyecto_nombre" disabled>
-                            </div>
+    <!-- Modal Editar/Eliminar Tarea (Click en evento del calendario) -->
+    <div class="modal fade" id="modalEditarTarea" tabindex="-1" role="dialog" aria-labelledby="modalEditarTareaLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="modalEditarTareaLabel">Editar/Eliminar Tarea</h5>
+                    <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarTarea">
+                        <input type="hidden" id="edit_t_id">
+                        <input type="hidden" id="edit_t_proyecto_id">
 
-                            <div class="form-group">
-                                <label for="edit_t_descripcion">Descripción</label>
-                                <textarea class="form-control" id="edit_t_descripcion" rows="2"></textarea>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-6 form-group">
-                                    <label for="edit_t_inicio">Inicio</label>
-                                    <input type="datetime-local" class="form-control" id="edit_t_inicio" required>
-                                </div>
-                                <div class="col-6 form-group">
-                                    <label for="edit_t_fin">Fin</label>
-                                    <input type="datetime-local" class="form-control" id="edit_t_fin" required>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" class="btn btn-danger" id="btnEliminarTarea">Eliminar Tarea</button>
-                        <div>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-primary" id="btnActualizarTarea">Guardar
-                                Cambios</button>
+                        <div class="form-group">
+                            <label>Proyecto</label>
+                            <input type="text" class="form-control" id="edit_t_proyecto_nombre" disabled>
                         </div>
+
+                        <div class="form-group">
+                            <label for="edit_t_descripcion">Descripción</label>
+                            <textarea class="form-control" id="edit_t_descripcion" rows="2"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 form-group">
+                                <label for="edit_t_inicio">Inicio</label>
+                                <input type="datetime-local" class="form-control" id="edit_t_inicio" required>
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="edit_t_fin">Fin</label>
+                                <input type="datetime-local" class="form-control" id="edit_t_fin" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-danger" id="btnEliminarTarea">Eliminar Tarea</button>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="btnActualizarTarea">Guardar
+                            Cambios</button>
                     </div>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
+
     <!-- Modal Generar PDF -->
     <div class="modal fade" id="modalGenerarPdf" tabindex="-1" role="dialog" aria-labelledby="modalGenerarPdfLabel"
         aria-hidden="true">
@@ -267,7 +265,7 @@
 
                     <div class="row">
                         <div class="col-md-6 form-group mb-3">
-                            <label for="prioridad " class="form-label fw-bold" >Filtrar por prioridad</label>
+                            <label for="prioridad " class="form-label fw-bold">Filtrar por prioridad</label>
                             <select name="prioridad" id="prioridad" class="form-control">
                                 <option value="0">Todas</option>
                                 <option value="1">ALTAS</option>
@@ -302,6 +300,6 @@
 @stop
 
 @section('js')
-    @vite(['resources/js/proyectos.js','resources/js/echo.js'])
+    @vite(['resources/js/proyectos.js', 'resources/js/echo.js'])
 
 @stop

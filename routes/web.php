@@ -1,11 +1,6 @@
 <?php
 
-use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProyectoController;
-use App\Http\Controllers\TareaController;
-use App\Http\Controllers\UserController;
-use App\Http\Middleware\isAdminMiddleware;
 use App\Models\Proyecto;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -38,11 +33,13 @@ Route::get('proyectos', function () {
     return view('proyectos', ['usuarios' => User::all(), 'proyectos' => Proyecto::all()]);
 });
 
-Route::apiResource('api/proyecto', ProyectoController::class);
-Route::apiResource('api/tarea', TareaController::class);
 
-// PDF
-Route::get('pdf/informe-tareas', [PdfController::class, 'generarPdf'])->name('pdf.informe-tareas');
+
+
+
+Route::get('/InicioSesion', function(){
+    return view('inicioSesion');
+});
 
 require __DIR__.'/auth.php';
 

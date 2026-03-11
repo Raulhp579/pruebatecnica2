@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    
+</head>
+<body class="bg-light">
+
+    <!-- Login Container -->
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card shadow-sm" style="width: 100%; max-width: 400px;">
+            <div class="card-body p-4 p-md-5">
+                
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-primary">Bienvenido</h2>
+                    <p class="text-muted">Introduce tus credenciales para acceder</p>
+                </div>
+
+                <!-- Email Field -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="email" placeholder="tu@ejemplo.com">
+                </div>
+
+                <!-- Password Field -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label for="password" class="form-label mb-0">Contraseña</label>
+                    </div>
+                    <input type="password" class="form-control mt-2" id="password" placeholder="••••••••">
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div class="mb-4 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember_me">
+                    <label class="form-check-label text-muted" for="remember_me">Mantener sesión iniciada</label>
+                </div>
+
+                <!-- Login Button -->
+                <div class="d-grid">
+                    <button type="button" class="btn btn-primary btn-lg" id="btn-login" >Iniciar Sesión</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    @vite(['resources/js/InicioSesion.js','resources/js/app.js'])
+
+</body>
+</html>

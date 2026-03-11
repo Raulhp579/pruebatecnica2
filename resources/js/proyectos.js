@@ -8,6 +8,7 @@ let proyectoFiltradoId = null;
 let usuarioFiltradoId = null;
 
 let prioridad = null;
+const usuario = null;
 
 // Helper: obtener el token CSRF de la meta tag
 function csrfToken() {
@@ -15,6 +16,15 @@ function csrfToken() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    const response = await fetch("/api/userInfo", {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
+        },
+    });
+
+    const data = await response.json();
+
+    console.log(data);
     // 1. Cargamos Proyectos e Inicializamos Draggables
     await cargarListaProyectos();
 
@@ -64,6 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const res = await fetch("/api/tarea", {
                     headers: {
                         "X-CSRF-TOKEN": csrfToken(),
+                        Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
                     },
                 });
                 const tareas = await res.json();
@@ -108,6 +119,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const fin = info.event.end;
 
             document.getElementById("edit_t_id").value = tareaId;
+            document.getElementById("edit_t_proyecto_id").value =
+                info.event.extendedProps.proyecto_id || "";
             document.getElementById("edit_t_proyecto_nombre").value =
                 proyectoNombre;
             document.getElementById("edit_t_descripcion").value = descripcion;
@@ -173,6 +186,7 @@ async function cargarListaProyectos() {
         const response = await fetch("/api/proyecto", {
             headers: {
                 "X-CSRF-TOKEN": csrfToken(),
+                Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
             },
         });
         const data = await response.json();
@@ -271,6 +285,7 @@ if (btnGuardarProyecto) {
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": csrfToken(),
+                    Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
                 },
                 body: JSON.stringify({ nombre: nombre }),
             });
@@ -309,6 +324,7 @@ if (btnGuardarTarea) {
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": csrfToken(),
+                    Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
                 },
                 body: JSON.stringify(tareaData),
             });
@@ -339,14 +355,15 @@ if (btnActualizarTarea) {
             descripcion: document.getElementById("edit_t_descripcion").value,
             tiempo_inicio: document.getElementById("edit_t_inicio").value,
             tiempo_fin: document.getElementById("edit_t_fin").value,
+            proyecto_id: document.getElementById("edit_t_proyecto_id").value,
         };
-
         try {
             const response = await fetch(`/api/tarea/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": csrfToken(),
+                    Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
                 },
                 body: JSON.stringify(tareaData),
             });
@@ -379,6 +396,7 @@ if (btnEliminarTarea) {
                 headers: {
                     "X-CSRF-TOKEN": csrfToken(),
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
                 },
             });
 
@@ -400,6 +418,7 @@ async function cargarSelectUsuarios() {
         const res = await fetch("/api/user", {
             headers: {
                 "X-CSRF-TOKEN": csrfToken(),
+                Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
             },
         });
         const usuarios = await res.json();
@@ -410,7 +429,7 @@ async function cargarSelectUsuarios() {
         }
 
         sel.innerHTML = '<option value="">Todos los usuarios</option>';
-        usuarios.forEach((u) => {
+        usuarios.data.forEach((u) => {
             const opt = document.createElement("option");
             opt.value = u.id;
             opt.textContent = u.name;
@@ -431,7 +450,7 @@ async function cargarSelectUsuarios() {
 const btnDescargar = document.querySelector("#btnDescargarPdf");
 
 if (btnDescargar) {
-    btnDescargar.addEventListener("click", () => {
+    btnDescargar.addEventListener("click", async () => {
         const usuario = document.querySelector("#pdf_usuario");
         const proyecto = document.querySelector("#pdf_proyecto");
         const fechaInicio = document.querySelector("#pdf_fecha_inicio");
@@ -451,10 +470,39 @@ if (btnDescargar) {
             return;
         }
 
-        const url = `/pdf/informe-tareas?user=${usuario.value}&proyecto=${proyecto.value}&fecha_inicio=${fechaInicio.value}&fecha_fin=${fechaFin.value}&prioridad=${prioridad.value}`;
+        const url = `/api/pdf/informe-tareas?user=${usuario.value}&proyecto=${proyecto.value}&fecha_inicio=${fechaInicio.value}&fecha_fin=${fechaFin.value}&prioridad=${prioridad.value}`;
 
-        // Abrir PDF en una pestaña nueva
-        window.open(url, "_blank");
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
+                },
+            });
+
+            if (!response.ok) {
+                alert("Error al generar el PDF");
+                return;
+            }
+
+            const blob = await response.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = downloadUrl;
+            a.download = "informe-tareas.pdf";
+            
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(() => {
+                window.URL.revokeObjectURL(downloadUrl);
+                a.remove();
+            }, 100);
+
+        } catch (error) {
+            console.error("Error downloading PDF:", error);
+            alert("Error al generar el PDF");
+        }
 
         // Cerrar modal
         window.$("#modalGenerarPdf").modal("hide");

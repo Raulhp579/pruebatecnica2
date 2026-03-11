@@ -23,9 +23,11 @@ class isAdminMiddleware
             ]);
         }
 
+        
         $user = Auth::user();
 
-        if(Auth::user()->rol != 1){
+
+        if(Auth::user()->rol->id_rol != 1){
             return response()->json([
                 "error"=>"el usuario no es administrador"
             ]);

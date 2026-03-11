@@ -1,121 +1,112 @@
-import $ from 'jquery';
-import DataTable from 'datatables.net-dt';
-
+import $ from "jquery";
+import DataTable from "datatables.net-dt";
 
 document.addEventListener("DOMContentLoaded", () => {
-    cargarUsuarios()
+    cargarUsuarios();
 });
 
-
 const cargarTabla = (data) => {
-
-    console.log(data)
     const lang = {
-        "sProcessing": "Procesando...",
-        "sLengthMenu": "Mostrar _MENU_ registros",
-        "sZeroRecords": "No se encontraron resultados",
-        "sEmptyTable": "Ningún dato disponible en esta tabla",
-        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-        "sInfoPostFix": "",
-        "sSearch": "Buscar:",
-        "sUrl": "",
-        "sInfoThousands": ",",
-        "sLoadingRecords": "Cargando...",
-        "oPaginate": {
-            "sFirst": "Primero",
-            "sLast": "Último",
-            "sNext": "Siguiente",
-            "sPrevious": "Anterior"
+        sProcessing: "Procesando...",
+        sLengthMenu: "Mostrar _MENU_ registros",
+        sZeroRecords: "No se encontraron resultados",
+        sEmptyTable: "Ningún dato disponible en esta tabla",
+        sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+        sInfoPostFix: "",
+        sSearch: "Buscar:",
+        sUrl: "",
+        sInfoThousands: ",",
+        sLoadingRecords: "Cargando...",
+        oPaginate: {
+            sFirst: "Primero",
+            sLast: "Último",
+            sNext: "Siguiente",
+            sPrevious: "Anterior",
         },
-        "oAria": {
-            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        oAria: {
+            sSortAscending:
+                ": Activar para ordenar la columna de manera ascendente",
+            sSortDescending:
+                ": Activar para ordenar la columna de manera descendente",
         },
-        "buttons": {
-            "copy": "Copiar",
-            "colvis": "Visibilidad"
-        }
-    }
+        buttons: {
+            copy: "Copiar",
+            colvis: "Visibilidad",
+        },
+    };
+
     data.forEach(usuario => {
-        if (usuario.administrador == 0) {
-            usuario.administrador = 'NO'
-        } else {
-            usuario.administrador = 'SI'
+        if(usuario.administrador == 1){
+            usuario.administrador = "Es administrador"
+        }else if(usuario.administrador == 2){
+            usuario.administrador = "No es administrador"
         }
     });
 
     $(document).ready(function () {
-        if ($.fn.DataTable.isDataTable('#tablaUsuarios')) {
-            $('#tablaUsuarios').DataTable().destroy();
-            $('#tablaUsuarios').empty();
+        if ($.fn.DataTable.isDataTable("#tablaUsuarios")) {
+            $("#tablaUsuarios").DataTable().destroy();
+            $("#tablaUsuarios").empty();
         }
 
         //Enlazando tabla con datos AJAX
-        const table = $('#tablaUsuarios').DataTable({
+        const table = $("#tablaUsuarios").DataTable({
             language: lang,
             data: data,
-            columns: [{
-                data: 'id'
-            }, {
-                data: 'name'
-            }, {
-                data: 'email'
-            }, {
-                data: 'administrador'
-            },
-            {
-                data: null,
-                render: function (data, type, row, meta) {
-                    return '<a class="btn btn-sm btn-success btnEdit" style="margin-right: 5px; cursor: pointer;"><i class="fa fa-edit"></i></a>' +
-                        '<a class="btn btn-sm btn-danger btnDelete" style="cursor: pointer;"><i class="fa fa-trash"></i></a>';
-                }
-            }
-
+            columns: [
+                {
+                    data: "id",
+                },
+                {
+                    data: "name",
+                },
+                {
+                    data: "email",
+                },
+                {
+                    data: "administrador",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        return (
+                            '<a class="btn btn-sm btn-success btnEdit" style="margin-right: 5px; cursor: pointer;"><i class="fa fa-edit"></i></a>' +
+                            '<a class="btn btn-sm btn-danger btnDelete" style="cursor: pointer;"><i class="fa fa-trash"></i></a>'
+                        );
+                    },
+                },
             ],
         });
 
-        $('#tablaUsuarios').off('click', '.btnEdit').on('click', '.btnEdit', function () {
-            const data = table.row($(this).closest('tr')).data();
-            if(data) abrirModalEditar(data);
-        });
+        $("#tablaUsuarios")
+            .off("click", ".btnEdit")
+            .on("click", ".btnEdit", function () {
+                const data = table.row($(this).closest("tr")).data();
+                if (data) abrirModalEditar(data);
+            });
 
-        $('#tablaUsuarios').off('click', '.btnDelete').on('click', '.btnDelete', function () {
-            const data = table.row($(this).closest('tr')).data();
-            if(data) eliminarUsuario(data.id);
-        });
+        $("#tablaUsuarios")
+            .off("click", ".btnDelete")
+            .on("click", ".btnDelete", function () {
+                const data = table.row($(this).closest("tr")).data();
+                if (data) eliminarUsuario(data.id);
+            });
     });
+};
 
-}
+async function cargarUsuarios() {
+    const response = await fetch("/api/user", {
+        headers: {
+            'Authorization':`Bearer ${localStorage.getItem("AuthToken")}`
+        },
+    });
+    const data = await response.json();
 
-async function cargarUsuarios(nombreUsuario) {
-
-    console.log(nombreUsuario)
-
-    if (nombreUsuario) {
-
-        const response = await fetch("/api/user?nombre=" + nombreUsuario)
-        const data = await response.json()
-        cargarTabla(data)
-
-    } else {
-        const response = await fetch("/api/user", {
-            headers: {
-                "X-CSRF-TOKEN": document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute("content"),
-            },
-        });
-        const data = await response.json();
-        cargarTabla(data)
-    }
-
-
-
-
-
-
+    console.log(data.data);
+    
+    cargarTabla(data.data);
 }
 
 // Llenamos el modal con los datos del usuario correspondiente y lo mostramos
@@ -156,6 +147,7 @@ document
                     "X-CSRF-TOKEN": document
                         .querySelector('meta[name="csrf-token"]')
                         .getAttribute("content"),
+                    'Authorization':`Bearer ${localStorage.getItem("AuthToken")}`
                 },
                 body: JSON.stringify(usuarioActualizado),
             });
@@ -180,6 +172,7 @@ async function eliminarUsuario(id) {
                 "X-CSRF-TOKEN": document
                     .querySelector('meta[name="csrf-token"]')
                     .getAttribute("content"),
+                'Authorization':`Bearer ${localStorage.getItem("AuthToken")}`
             },
         });
 
@@ -192,8 +185,7 @@ async function eliminarUsuario(id) {
     }
 }
 
-
-const btnAñadirUsuario = document.querySelector("#btnGuardarUsuario")
+const btnAñadirUsuario = document.querySelector("#btnGuardarUsuario");
 
 btnAñadirUsuario.addEventListener("click", async () => {
     const usuarioAñadido = {
@@ -211,6 +203,7 @@ btnAñadirUsuario.addEventListener("click", async () => {
                 "X-CSRF-TOKEN": document
                     .querySelector('meta[name="csrf-token"]')
                     .getAttribute("content"),
+                'Authorization':`Bearer ${localStorage.getItem("AuthToken")}`
             },
             body: JSON.stringify(usuarioAñadido),
         });
@@ -226,8 +219,7 @@ btnAñadirUsuario.addEventListener("click", async () => {
     }
 });
 
-
-const filtroNombre = document.querySelector("#dt-search-0")
+const filtroNombre = document.querySelector("#dt-search-0");
 
 // filtroNombre.addEventListener("change", async () => {
 //     const nombre = filtroNombre.value
@@ -235,10 +227,6 @@ const filtroNombre = document.querySelector("#dt-search-0")
 //     cargarUsuarios(nombre)
 
 // })
-
-
-
-
 
 /*    try {
 

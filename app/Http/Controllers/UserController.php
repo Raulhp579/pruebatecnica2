@@ -7,30 +7,40 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
         try {
-            if (isset($request->nombre)) {
-                /*  return response()->json(User::where("name",'LIKE',"%$request->nombre%")->get()); */
 
-                $model = User::query();
+            /* return response()->json(User::all()); */
 
-                return DataTables::eloquent($model)
-                    ->addColumn('id', 'el id del usuario')
-                    ->addColumn('name', 'el nombre del usuario')
-                    ->addColumn('email', 'el email del usuario')
-                    ->addColumn('administrador', 'si el usuario es administrador')
-                    ->make(false);
-            }
+            $model = User::query();
 
-            return response()->json(User::all());
+
+            return DataTables::eloquent($model)
+                ->addColumn('id', function ($row) {
+                    return $row->id;
+                })
+                ->addColumn('name', function ($row) {
+                    return $row->name;
+                })
+                ->addColumn('email', function ($row) {
+                    return $row->email;
+                })
+                ->addColumn('administrador', function ($row) {
+                    if ($row->rol) {
+                        return $row->rol->id_rol; 
+                    }
+                    return "Sin rol asignado";
+                })
+                ->make(true); 
+
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'no se han podido mostrar los usuarios',
@@ -123,11 +133,11 @@ class UserController extends Controller
         ]);
     }
 
-/*     public function pruebaRol(string $id)
-    {
-        $user = User::where('id', $id)->first();
-        $rol = Rol::where("id",1)->first();
+    /*     public function pruebaRol(string $id)
+        {
+            $user = User::where('id', $id)->first();
+            $rol = Rol::where("id",1)->first();
 
-        return response()->json($rol->users);
-    } */
+            return response()->json($rol->users);
+        } */
 }
