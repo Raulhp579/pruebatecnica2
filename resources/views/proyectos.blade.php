@@ -50,7 +50,7 @@
                     </div>
                     <div class="ml-auto" style="min-width:200px">
                         <select id="filtroPrioridad" class="form-control form-control-sm">
-                            <option value="0">Todas la prioridades</option>
+                            <option value="">Todas la prioridades</option>
                             <option value="1">ALTA</option>
                             <option value="2">MEDIA</option>
                             <option value="3">BAJA</option>

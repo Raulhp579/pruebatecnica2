@@ -470,6 +470,5 @@ selectPrioridad.addEventListener("change", () =>{
         window.miCalendario.refetchEvents()
     }
 
-
 })
 
