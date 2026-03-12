@@ -33,18 +33,22 @@ const filtroDivUsuario = document.querySelector("#filtroUsuario")
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    $('.usuarios').select2();
-    $('.prioridad').select2();
+    // select2 será inicializado después de cargar los datos
 
-    botonesAdmin.style.display = "none"
-    selectUsuarios.style.display = "none"
-    filtroDivUsuario.style.display = "none"
+    // botonesAdmin.style.display = "none"
+    // selectUsuarios.style.display = "none"
+    // filtroDivUsuario.style.display = "none"
 
-    if (await getUserRol() == 1) {
-        selectUsuarios.style.display = ""
-        botonesAdmin.style.display = ""
-        filtroDivUsuario.style.display=""
+    const isAdmin = (await getUserRol()) == 1;
 
+    if (isAdmin) {
+        if (selectUsuarios) selectUsuarios.style.display = "";
+        if (botonesAdmin) botonesAdmin.style.display = "";
+        if (filtroDivUsuario) filtroDivUsuario.style.display = "";
+    } else {
+        if (selectUsuarios) selectUsuarios.style.display = "none";
+        if (botonesAdmin) botonesAdmin.style.display = "none";
+        if (filtroDivUsuario) filtroDivUsuario.style.display = "none";
     }
 
     const response = await fetch("/api/userInfoRol", {
@@ -60,9 +64,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     await cargarListaProyectos();
 
     // 2. Cargar usuarios en el select del calendario
-    if (await getUserRol() == 1) {
+    if (isAdmin) {
         await cargarSelectUsuarios();
     }
+
+    // Inicializar Select2 DESPUÉS de cargar los datos
+    $('.usuarios').select2({
+        width: '100%'
+    });
+    $('.prioridad').select2({
+        width: '100%'
+    });
 
 
     // 2. Inicializamos FullCalendar
@@ -484,12 +496,15 @@ async function cargarSelectUsuarios() {
         });
 
 
-        $(sel).off("change").on("change", () => {
-            usuarioFiltradoId = $(sel).val() || null;
+        $(sel).off("change").on("change", function() {
+            usuarioFiltradoId = $(this).val() || null;
             if (window.miCalendario) {
                 window.miCalendario.refetchEvents();
             }
         });
+
+        // Notificar a select2 que los datos han cambiado si ya estaba inicializado
+        $(sel).trigger('change');
 
     } catch (e) {
         console.error("Error al cargar usuarios para el select:", e);

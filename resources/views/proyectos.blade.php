@@ -133,7 +133,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="asignado">prioridad</label>
+                            <label for="asignado">Asignar a Usuario</label>
                             <select name="asignado" id="asignado">
                                 @foreach ($usuarios as $usuario)
                                     <option value={{ $usuario->id }}>{{ $usuario->name }}</option>
