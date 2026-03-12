@@ -13,15 +13,41 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
 });
 
+let idUser = null
 
 window.Pusher.logToConsole = true;
 
+document.addEventListener("DOMContentLoaded", async () => {
+    const data =  await obtenerUsuario()
+    idUser = data.id
+})
 
-const idUser = document.querySelector("#idUsuario").dataset.userId
+const obtenerUsuario = async () => {
+    try {
+        const response = await fetch('/api/userInfo', {
+            headers: {
+                 Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
+            }
+        })
+        const data = await response.json()
 
-window.Echo.private("crearTarea."+idUser)
+        return data
+    }catch(e){
+        console.log("Error aqui "+e)
+    }
+
+
+
+
+}
+
+
+
+window.Echo.channel("crearTarea")
     .listen('.create', (data)=>{
-                alert("Se te ha asignado una nueva tarea")
+        if(data == idUser){
+            alert("Se te ha asignado una nueva tarea")
+        }
     })
 
 

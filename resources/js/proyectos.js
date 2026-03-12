@@ -1,6 +1,17 @@
 import { Calendar } from "fullcalendar";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import $ from 'jquery';
+import select2 from 'select2';
+import 'select2/dist/css/select2.css';
+select2($);
+
+
+
+
+
+
+window.$ = window.jQuery = $;
 
 // Variable global para el filtro del calendario por proyecto
 let proyectoFiltradoId = null;
@@ -15,8 +26,28 @@ function csrfToken() {
     return document.querySelector('meta[name="csrf-token"]')?.content || "";
 }
 
+const botonesAdmin = document.querySelector("#botonesAdmin")
+const filtroDivUsuario = document.querySelector("#filtroUsuario")
+
+
+
+
 document.addEventListener("DOMContentLoaded", async () => {
-    const response = await fetch("/api/userInfo", {
+    $('.usuarios').select2();
+    $('.prioridad').select2();
+
+    botonesAdmin.style.display = "none"
+    selectUsuarios.style.display = "none"
+    filtroDivUsuario.style.display = "none"
+
+    if (await getUserRol() == 1) {
+        selectUsuarios.style.display = ""
+        botonesAdmin.style.display = ""
+        filtroDivUsuario.style.display=""
+
+    }
+
+    const response = await fetch("/api/userInfoRol", {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
         },
@@ -29,7 +60,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     await cargarListaProyectos();
 
     // 2. Cargar usuarios en el select del calendario
-    await cargarSelectUsuarios();
+    if (await getUserRol() == 1) {
+        await cargarSelectUsuarios();
+    }
+
 
     // 2. Inicializamos FullCalendar
     const calendarEl = document.getElementById("calendarioProyectos");
@@ -69,14 +103,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         droppable: true, // Permitir arrastrar cosas aquí
 
         // Cargar Tareas: filtra por proyecto y/o usuario si hay filtros activos
+
         events: async function (info, successCallback, failureCallback) {
             try {
-                const res = await fetch("/api/tarea", {
-                    headers: {
-                        "X-CSRF-TOKEN": csrfToken(),
-                        Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
-                    },
-                });
+                let res = null
+
+                if (await getUserRol() == 1) {
+                    res = await fetch("/api/tarea", {
+                        headers: {
+                            "X-CSRF-TOKEN": csrfToken(),
+                            Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
+                        },
+                    });
+                } else if (await getUserRol() == 2) {
+                    res = await fetch("/api/misTareas", {
+                        headers: {
+                            "X-CSRF-TOKEN": csrfToken(),
+                            Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
+                        },
+                    });
+                }
+
+
                 const tareas = await res.json();
 
                 const tareasFiltradas = tareas.filter((t) => {
@@ -110,7 +158,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         },
 
         // Click en un evento: abrir modal para editar/eliminar esa tarea
-        eventClick: function (info) {
+        eventClick: async function (info) {
             const tareaId = info.event.id;
             const descripcion = info.event.extendedProps.descripcion || "";
             const proyectoNombre =
@@ -428,7 +476,6 @@ async function cargarSelectUsuarios() {
             return;
         }
 
-        sel.innerHTML = '<option value="">Todos los usuarios</option>';
         usuarios.data.forEach((u) => {
             const opt = document.createElement("option");
             opt.value = u.id;
@@ -436,12 +483,14 @@ async function cargarSelectUsuarios() {
             sel.appendChild(opt);
         });
 
-        sel.addEventListener("change", () => {
-            usuarioFiltradoId = sel.value || null;
+
+        $(sel).off("change").on("change", () => {
+            usuarioFiltradoId = $(sel).val() || null;
             if (window.miCalendario) {
                 window.miCalendario.refetchEvents();
             }
         });
+
     } catch (e) {
         console.error("Error al cargar usuarios para el select:", e);
     }
@@ -490,10 +539,10 @@ if (btnDescargar) {
             a.style.display = "none";
             a.href = downloadUrl;
             a.download = "informe-tareas.pdf";
-            
+
             document.body.appendChild(a);
             a.click();
-            
+
             setTimeout(() => {
                 window.URL.revokeObjectURL(downloadUrl);
                 a.remove();
@@ -511,9 +560,28 @@ if (btnDescargar) {
 
 const selectPrioridad = document.querySelector("#filtroPrioridad");
 
-selectPrioridad.addEventListener("change", () => {
-    prioridad = selectPrioridad.value || null;
+
+
+$(selectPrioridad).on("change", function () {
+    prioridad = $(this).val() || null;
+
     if (window.miCalendario) {
         window.miCalendario.refetchEvents();
     }
 });
+
+
+const selectUsuarios = document.querySelector("#filtroUsuarioCalendario")
+
+const getUserRol = async () => {
+    const response = await fetch("/api/userInfoRol", {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('AuthToken')}`
+        }
+    })
+
+    const data = await response.json()
+
+    return data
+}
+

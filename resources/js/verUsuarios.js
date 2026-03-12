@@ -105,7 +105,7 @@ async function cargarUsuarios() {
     const data = await response.json();
 
     console.log(data.data);
-    
+
     cargarTabla(data.data);
 }
 
@@ -219,7 +219,7 @@ btnAñadirUsuario.addEventListener("click", async () => {
     }
 });
 
-const filtroNombre = document.querySelector("#dt-search-0");
+
 
 // filtroNombre.addEventListener("change", async () => {
 //     const nombre = filtroNombre.value

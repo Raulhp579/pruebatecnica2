@@ -23,8 +23,6 @@ class isAdminMiddleware
             ]);
         }
 
-        
-        $user = Auth::user();
 
 
         if(Auth::user()->rol->id_rol != 1){

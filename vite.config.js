@@ -12,6 +12,7 @@ export default defineConfig({
                 "resources/js/proyectos.js",
                 "resources/js/echo.js",
                 "resources/js/InicioSesion.js",
+                "resources/js/perfil.js",
             ],
             refresh: true,
         }),

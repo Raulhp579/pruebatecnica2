@@ -95,4 +95,22 @@ class TareaController extends Controller
 
         return response()->json(["message"=> "tarea borrada exitosamente"],200);
     }
+
+
+    public function getByIdUser(){
+        try{
+            $idUser = Auth::user()->id;
+
+            $tareas = Tarea::where("id_user", $idUser)->get();
+
+            return response()->json($tareas);
+        }catch(Exception $e){
+            return response()->json([
+                "error"=>"Ha ocurrido un error mostrando las tareas"
+            ]);
+        }
+
+
+
+    }
 }

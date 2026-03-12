@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Middleware\isAdminMiddleware;
+use Illuminate\Container\Attributes\Auth;
+use Illuminate\Validation\Rules\Can;
+
 return [
 
     /*
@@ -70,7 +74,7 @@ return [
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'Admin Logo',
 
-    
+
 
     /*
     |--------------------------------------------------------------------------
@@ -308,10 +312,12 @@ return [
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
+
         [
             'text'=>'ver usuarios',
             'url'=>'verUsuarios',
             'icon'=>'fas fa-fw fa-users',
+            'id'=>'usuariosNav'
         ],
         [
             'text'=>'proyectos',
@@ -322,11 +328,12 @@ return [
 
 
         ['header' => 'account_settings'],
-        
+
         [
             'text' => 'profile',
-            'url' => 'profile',
+            'url' => 'perfil',
             'icon' => 'fas fa-fw fa-user',
+            'id'=> 'perfilNav'
         ],
         [
             'text'=> 'login',

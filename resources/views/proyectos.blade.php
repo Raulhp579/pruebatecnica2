@@ -7,7 +7,7 @@
         <h1>Gestión de Proyectos</h1>
         <!-- Botón para abrir el Modal de Creación (Solo Administradores) -->
 
-        <div>
+        <div id="botonesAdmin">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCrearProyecto">
                 <i class="fas fa-plus mr-1"></i> Crear Proyecto
             </button>
@@ -37,16 +37,16 @@
 
         <!-- Columna reservada para el Calendario -->
         <div class="col-md-8">
-            <div class="card card-outline card-success">
-                <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card card-outline card-success ">
+                <div class="card-header d-flex justify-content-end align-items-center ">
                     <h3 class="card-title mb-0"><i class="far fa-calendar-alt mr-1"></i> Calendario de Proyectos</h3>
-                    <div class="ml-auto" style="min-width:200px">
-                        <select id="filtroUsuarioCalendario" class="form-control form-control-sm">
+                    <div id="filtroUsuario" class="ml-auto" style="min-width:50%">
+                        <select id="filtroUsuarioCalendario" class="form-control form-control-sm usuarios">
                             <option value="">Todos los usuarios</option>
                         </select>
                     </div>
                     <div class="ml-auto" style="min-width:200px">
-                        <select id="filtroPrioridad" class="form-control form-control-sm">
+                        <select id="filtroPrioridad" class="form-control form-control-sm prioridad">
                             <option value="">Todas la prioridades</option>
                             <option value="1">ALTA</option>
                             <option value="2">MEDIA</option>
@@ -115,7 +115,7 @@
 
                         <div class="form-group">
                             <label>Proyecto Seleccionado</label>
-                            <input type="text" class="form-control" id="t_proyecto_nombre" >
+                            <input type="text" class="form-control" id="t_proyecto_nombre">
                         </div>
 
                         <div class="form-group">
@@ -169,9 +169,6 @@
             <div class="modal-content">
                 <div class="modal-header bg-warning">
                     <h5 class="modal-title" id="modalEditarTareaLabel">Editar/Eliminar Tarea</h5>
-                    <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     <form id="formEditarTarea">
@@ -300,6 +297,6 @@
 @stop
 
 @section('js')
-    @vite(['resources/js/proyectos.js', 'resources/js/echo.js'])
+    @vite(['resources/js/proyectos.js', 'resources/js/echo.js', 'resources/js/app.js'])
 
 @stop

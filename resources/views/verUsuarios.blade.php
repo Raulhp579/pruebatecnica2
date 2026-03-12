@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body table-responsive p-0">
+                <div class="card-body table-responsive p-2">
                     <table class="table table-hover text-nowrap table-striped" id="tablaUsuarios">
                         <thead>
                             <tr>
@@ -152,5 +152,5 @@
 @stop
 
 @section('js')
-    @vite(['resources/js/verUsuarios.js'])
+    @vite(['resources/js/verUsuarios.js','resources/js/app.js'])
 @stop

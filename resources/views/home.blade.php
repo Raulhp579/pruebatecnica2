@@ -35,7 +35,6 @@
 @stop
 
 @section('js')
-    <script>
-        console.log('Vista admin cargada correctamente');
-    </script>
+    @vite(['resources/js/app.js'])
+
 @stop

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-    
+
 </head>
 <body class="bg-light">
 
@@ -12,7 +12,7 @@
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="card shadow-sm" style="width: 100%; max-width: 400px;">
             <div class="card-body p-4 p-md-5">
-                
+
                 <div class="text-center mb-4">
                     <h2 class="fw-bold text-primary">Bienvenido</h2>
                     <p class="text-muted">Introduce tus credenciales para acceder</p>
@@ -30,12 +30,6 @@
                         <label for="password" class="form-label mb-0">Contraseña</label>
                     </div>
                     <input type="password" class="form-control mt-2" id="password" placeholder="••••••••">
-                </div>
-
-                <!-- Remember Me Checkbox -->
-                <div class="mb-4 form-check">
-                    <input type="checkbox" class="form-check-input" id="remember_me">
-                    <label class="form-check-label text-muted" for="remember_me">Mantener sesión iniciada</label>
                 </div>
 
                 <!-- Login Button -->
