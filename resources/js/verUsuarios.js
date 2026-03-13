@@ -200,7 +200,7 @@ btnAñadirUsuario.addEventListener("click", async () => {
         esAdmin: rol?1:2,
     };
 
-    console.log(usuarioAñadido)
+
 
     try {
         const response = await fetch("/api/user", {

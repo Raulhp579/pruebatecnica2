@@ -130,11 +130,15 @@ class UserController extends Controller
     {
         $user = User::where('id', $id)->first();
 
+
         if (! $user) {
             return response()->json([
                 'error' => 'usuario no encontrado',
             ]);
         }
+
+        $user_rol = User_Rol::where("id_user", $id)->first();
+        $user_rol->delete();
 
         $user->delete();
 
