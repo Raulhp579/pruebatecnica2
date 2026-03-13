@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProfileController;
 use App\Models\Proyecto;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;

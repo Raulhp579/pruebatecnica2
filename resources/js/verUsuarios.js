@@ -189,8 +189,9 @@ async function eliminarUsuario(id) {
 
 const btnAñadirUsuario = document.querySelector("#btnGuardarUsuario");
 
-btnAñadirUsuario.addEventListener("click", async () => {
+btnAñadirUsuario.addEventListener("click", async (e) => {
 
+    e.preventDefault()
     const rol = document.querySelector("#add_administrador").checked
 
     const usuarioAñadido = {
@@ -219,7 +220,6 @@ btnAñadirUsuario.addEventListener("click", async () => {
         console.log("Respuesta al añadir:", data);
 
         // Escondemos el modal y recargamos la tabla
-        window.$("#modalAñadirUsuario").modal("hide");
         cargarUsuarios();
     } catch (error) {
         console.error("Error al añadir el usuario:", error);
