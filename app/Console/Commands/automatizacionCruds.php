@@ -20,7 +20,7 @@ class automatizacionCruds extends Command
      *
      * @var string
      */
-    protected $description = 'Este comando automatiza la creacion de CRUDS crea el controlador, model, middleware, migraciones';
+    protected $description = 'Este comando automatiza la creacion de CRUDS crea el controlador, model, vistas y migraciones';
 
     /**
      * Execute the console command.
