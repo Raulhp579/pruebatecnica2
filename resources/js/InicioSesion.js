@@ -14,7 +14,7 @@ botonLogin.addEventListener("click",async ()=>{
 
     localStorage.setItem("AuthToken", data)
 
-    window.location.href = "/";
+    window.location.href = "/home";
 })
 
 

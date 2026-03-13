@@ -127,10 +127,12 @@ document
     .addEventListener("click", async () => {
         const id = document.getElementById("edit_id").value;
 
+        const rol = document.getElementById("edit_administrador").checked
+
         const usuarioActualizado = {
             nombre: document.getElementById("edit_name").value,
             correo: document.getElementById("edit_email").value,
-            esAdmin: document.getElementById("edit_administrador").checked,
+            esAdmin: rol? 1:2,
         };
 
         // Solo enviamos la contraseña si el usuario ha escrito algo nuevo
@@ -188,12 +190,17 @@ async function eliminarUsuario(id) {
 const btnAñadirUsuario = document.querySelector("#btnGuardarUsuario");
 
 btnAñadirUsuario.addEventListener("click", async () => {
+
+    const rol = document.querySelector("#add_administrador").checked
+
     const usuarioAñadido = {
         nombre: document.getElementById("add_name").value,
         correo: document.getElementById("add_email").value,
         contrasena: document.getElementById("add_password").value,
-        esAdmin: document.getElementById("add_administrador").checked,
+        esAdmin: rol?1:2,
     };
+
+    console.log(usuarioAñadido)
 
     try {
         const response = await fetch("/api/user", {

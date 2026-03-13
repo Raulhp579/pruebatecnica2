@@ -9,8 +9,10 @@ use App\Http\Controllers\ProyectoController;
 use App\Http\Controllers\TareaController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PerfilController;
+use Illuminate\Container\Attributes\Auth;
 
 Route::get('/userInfoRol', function (Request $request) {
+    return response()->json($request->user()->rol->id_rol);
     return $request->user()->rol->id_rol;
 })->middleware('auth:sanctum');
 
@@ -43,6 +45,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::put("/cambiarPassword", [PerfilController::class, "cambiarPassword"]);
     Route::get('/misTareas', [TareaController::class, "getByIdUser"]);
     Route::put('/tarea/{id}', [TareaController::class, "update"]);
+    Route::get('/logout',[AuthController::class, 'logout']);
 });
 
 
@@ -51,3 +54,7 @@ Route::get('/proyecto', [ProyectoController::class, "index"]);
 Route::post('/tarea', [TareaController::class, "store"]);
 
 Route::get("/login", [AuthController::class, "login"]);
+Route::post('/registro',[AuthController::class, "register"]);
+
+
+Route::apiResource('/prueba', App\Http\Controllers\pruebaAutomatizacionController::class);

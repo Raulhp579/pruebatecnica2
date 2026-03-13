@@ -13,6 +13,7 @@ export default defineConfig({
                 "resources/js/echo.js",
                 "resources/js/InicioSesion.js",
                 "resources/js/perfil.js",
+                "resources/js/registro.js",
             ],
             refresh: true,
         }),

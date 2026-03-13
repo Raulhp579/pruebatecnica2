@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rol;
 use App\Models\User;
+use App\Models\User_Rol;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -35,11 +36,11 @@ class UserController extends Controller
                 })
                 ->addColumn('administrador', function ($row) {
                     if ($row->rol) {
-                        return $row->rol->id_rol; 
+                        return $row->rol->id_rol;
                     }
                     return "Sin rol asignado";
                 })
-                ->make(true); 
+                ->make(true);
 
         } catch (Exception $e) {
             return response()->json([
@@ -59,9 +60,14 @@ class UserController extends Controller
         $user->name = $request->nombre;
         $user->email = $request->correo;
         $user->password = Hash::make($request->contrasena);
-        $user->administrador = $request->esAdmin;
 
         $user->save();
+
+
+        User_Rol::create([
+            "id_user"=>$user->id,
+            "id_rol"=>$request->esAdmin
+        ]);
 
         return response()->json([
             'message' => 'usuario creado correctamente',
@@ -102,9 +108,14 @@ class UserController extends Controller
         $user->name = $request->nombre;
         $user->email = $request->correo;
         $user->password = Hash::make($request->contrasena);
-        $user->administrador = $request->esAdmin;
 
         $user->save();
+
+        $user_Rol = User_Rol::where("id_user", $id)->first();
+
+        $user_Rol->id_rol = $request->esAdmin;
+
+        $user_Rol->save();
 
         return response()->json([
             'message' => 'usuario actualizado correctamente',

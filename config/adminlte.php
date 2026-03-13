@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Middleware\isAdminMiddleware;
+use App\Models\SideNav;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Validation\Rules\Can;
+
+
 
 return [
 
@@ -263,7 +266,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => '/',
+    'dashboard_url' => '/home',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -305,7 +308,7 @@ return [
     */
 
     'menu' => [
-        // Sidebar items:
+        /* // Sidebar items:
         ['header' => 'MENÚ'],
         [
             'text' => 'blog',
@@ -336,10 +339,10 @@ return [
             'id'=> 'perfilNav'
         ],
         [
-            'text'=> 'login',
-            'url' => 'InicioSesion',
-            'icon' => 'fas fa-fw fa-user-check',
-        ]
+            'text'=> 'cerrar sesión',
+            'url' => '/',
+            'icon' => 'fas fa-fw fa-sign-out-alt',
+        ] */
 
     ],
 
