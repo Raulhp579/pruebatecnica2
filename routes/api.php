@@ -57,4 +57,3 @@ Route::get("/login", [AuthController::class, "login"]);
 Route::post('/registro',[AuthController::class, "register"]);
 
 
-Route::apiResource('/prueba', App\Http\Controllers\pruebaAutomatizacionController::class);

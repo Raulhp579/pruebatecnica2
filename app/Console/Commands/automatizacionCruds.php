@@ -13,7 +13,7 @@ class automatizacionCruds extends Command
      *
      * @var string
      */
-    protected $signature = 'crud:crear {nombre} {url} {id?} {autenticado?} {admin?}';
+    protected $signature = 'crud:crear {nombre} {url} {autenticado} {admin} {id?}';
 
     /**
      * The console command description.
@@ -52,9 +52,9 @@ class automatizacionCruds extends Command
         $this->info("creando las rutas...");
 
 
-        if($this->argument("autenticado")&&$this->argument("admin")){
+        if($this->argument("autenticado")&&$this->argument("autenticado")=='si'&&$this->argument("admin")&&$this->argument("admin")=='si'){
             $rutaApi = "\nRoute::apiResource('{$nombreRuta}', App\Http\Controllers\\{$nombreModelo}Controller::class)->middleware('auth:sanctum',isAdminMiddleware::class);";
-        }else if($this->argument("autenticado")){
+        }else if($this->argument("autenticado") &&$this->argument("autenticado")=='si'){
             $rutaApi = "\nRoute::apiResource('{$nombreRuta}', App\Http\Controllers\\{$nombreModelo}Controller::class)->middleware('auth:sanctum');";
         }else{
             $rutaApi = "\nRoute::apiResource('{$nombreRuta}', App\Http\Controllers\\{$nombreModelo}Controller::class);";

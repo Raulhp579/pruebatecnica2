@@ -49,4 +49,3 @@ require __DIR__.'/auth.php';
 
 
 
-Route::resource('/prueba', App\Http\Controllers\pruebaAutomatizacionController::class);
