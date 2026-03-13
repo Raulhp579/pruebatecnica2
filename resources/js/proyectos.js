@@ -28,6 +28,7 @@ function csrfToken() {
 
 const botonesAdmin = document.querySelector("#botonesAdmin")
 const filtroDivUsuario = document.querySelector("#filtroUsuario")
+const selectUsuarios = document.querySelector("#filtroUsuarioCalendario")
 
 
 
@@ -37,14 +38,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     $('.prioridad').select2();
 
     botonesAdmin.style.display = "none"
-    selectUsuarios.style.display = "none"
-    filtroDivUsuario.style.display = "none"
+    if (selectUsuarios) selectUsuarios.style.display = "none"
+    if (filtroDivUsuario) filtroDivUsuario.style.display = "none"
 
     if (await getUserRol() == 1) {
-        selectUsuarios.style.display = ""
+        if (selectUsuarios) selectUsuarios.style.display = ""
         botonesAdmin.style.display = ""
-        filtroDivUsuario.style.display=""
-
+        if (filtroDivUsuario) filtroDivUsuario.style.display=""
     }
 
     const response = await fetch("/api/userInfoRol", {
@@ -573,7 +573,11 @@ $(selectPrioridad).on("change", function () {
 });
 
 
-const selectUsuarios = document.querySelector("#filtroUsuarioCalendario")
+// Handler global para asegurar que los modales cierran al pulsar "Cancelar" o la (X)
+// Especialmente útil si hay conflictos entre instancias de jQuery (AdminLTE vs Vite)
+$(document).on('click', '[data-dismiss="modal"]', function() {
+    $(this).closest('.modal').modal('hide');
+});
 
 const getUserRol = async () => {
     const response = await fetch("/api/userInfoRol", {
