@@ -3,6 +3,7 @@ import DataTable from "datatables.net-dt";
 
 document.addEventListener("DOMContentLoaded", () => {
     cargarUsuarios();
+
 });
 
 const cargarTabla = (data) => {
@@ -227,6 +228,30 @@ btnAñadirUsuario.addEventListener("click", async (e) => {
 });
 
 
+const btnAsignarPermiso = document.querySelector("#btnGuardarPermiso")
+
+btnAsignarPermiso.addEventListener("click", () => {
+    const idUsuario = document.getElementById("edit_id").value;
+    const idPermiso = document.querySelector("#edit_Permiso").value
+
+    const datos = {
+        id_user : idUsuario,
+        id_permiso : idPermiso
+    }
+
+    const response = fetch("/api/asociarPermisoUsuario",{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify(datos)
+    })
+
+    const data = response.json();
+
+    console.log(data)
+
+})
 
 // filtroNombre.addEventListener("change", async () => {
 //     const nombre = filtroNombre.value

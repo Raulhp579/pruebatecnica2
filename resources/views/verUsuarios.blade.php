@@ -58,7 +58,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar Usuario</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <button id="cerrarCruz" type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -87,6 +87,19 @@
                                 <label class="custom-control-label" for="edit_administrador">¿Es Administrador?</label>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="edit_Permiso">Asignar Permiso</label>
+                            <select name="edit_Permiso" id="edit_Permiso">
+                                @foreach ($permisos as $permiso)
+                                    <option value={{ $permiso->id }}>{{$permiso->tipo_permiso}}</option>
+                                @endforeach
+                            </select>
+
+                            <button type="button" class="btn btn-primary mt-2" id="btnGuardarPermiso">Asignar permiso</button>
+                        </div>
+
+
                     </form>
                 </div>
                 <div class="modal-footer">

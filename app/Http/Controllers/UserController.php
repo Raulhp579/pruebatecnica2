@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permiso;
+use App\Models\Rol;
 use App\Models\User;
+use App\Models\User_Permiso;
 use App\Models\User_Rol;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,7 +25,6 @@ class UserController extends Controller
 
             $model = User::query();
 
-
             return DataTables::eloquent($model)
                 ->addColumn('id', function ($row) {
                     return $row->id;
@@ -37,7 +39,8 @@ class UserController extends Controller
                     if ($row->rol) {
                         return $row->rol->id_rol;
                     }
-                    return "Sin rol asignado";
+
+                    return 'Sin rol asignado';
                 })
                 ->make(true);
 
@@ -62,10 +65,9 @@ class UserController extends Controller
 
         $user->save();
 
-
         User_Rol::create([
-            "id_user"=>$user->id,
-            "id_rol"=>$request->esAdmin
+            'id_user' => $user->id,
+            'id_rol' => $request->esAdmin,
         ]);
 
         return response()->json([
@@ -110,7 +112,7 @@ class UserController extends Controller
 
         $user->save();
 
-        $user_Rol = User_Rol::where("id_user", $id)->first();
+        $user_Rol = User_Rol::where('id_user', $id)->first();
 
         $user_Rol->id_rol = $request->esAdmin;
 
@@ -129,14 +131,13 @@ class UserController extends Controller
     {
         $user = User::where('id', $id)->first();
 
-
         if (! $user) {
             return response()->json([
                 'error' => 'usuario no encontrado',
             ]);
         }
 
-        $user_rol = User_Rol::where("id_user", $id)->first();
+        $user_rol = User_Rol::where('id_user', $id)->first();
         $user_rol->delete();
 
         $user->delete();
@@ -147,11 +148,38 @@ class UserController extends Controller
         ]);
     }
 
-    /*     public function pruebaRol(string $id)
-        {
-            $user = User::where('id', $id)->first();
-            $rol = Rol::where("id",1)->first();
 
-            return response()->json($rol->users);
-        } */
+    public function asociarPermisoUser(Request $request){
+        $user_permiso = new User_Permiso();
+
+        $user_permiso->id_user = $request->id_user;
+        $user_permiso->id_permiso = $request->id_permiso;
+
+        $user_permiso->save();
+
+        return response()->json([
+            "success"=>"se ha asociado correctamente el permiso al usuario"
+        ]);
+    }
+    
+
+/*     public function pruebaRol(string $id)
+    {
+        $user = User::where('id', $id)->first();
+        $user_permisos = $user->permisos;
+
+        foreach($user_permisos as $up){
+            $permiso = Permiso::where("id", $up->id_permiso)->first();
+            if($permiso->tipo_permiso == 1){
+                return true;
+            }
+
+        }
+
+
+
+    } */
+
+
+
 }

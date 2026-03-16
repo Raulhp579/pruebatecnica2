@@ -108,14 +108,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             try {
                 let res = null
 
-                if (await getUserRol() == 1) {
+                if (await getUserRol() == 1 || await getUserRol() == 2) {
                     res = await fetch("/api/tarea", {
                         headers: {
                             "X-CSRF-TOKEN": csrfToken(),
                             Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
                         },
                     });
-                } else if (await getUserRol() == 2) {
+                } else if (await getUserRol() == 3) {
                     res = await fetch("/api/misTareas", {
                         headers: {
                             "X-CSRF-TOKEN": csrfToken(),

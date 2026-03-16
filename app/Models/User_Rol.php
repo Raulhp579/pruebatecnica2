@@ -18,11 +18,13 @@ class User_Rol extends Model
         'id_rol',
     ];
 
-    public function user(){
-        return $this->belongsTo(User::class, "id_user","id");
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
-    public function rol(){
-        require $this->belongsTo(Rol::class, "rol_id", "id");
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'id_rol', 'id');
     }
 }
