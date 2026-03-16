@@ -41,7 +41,7 @@ const cargarTabla = (data) => {
     data.forEach(usuario => {
         if(usuario.administrador == 1){
             usuario.administrador = "Es administrador"
-        }else if(usuario.administrador == 2){
+        }else{
             usuario.administrador = "No es administrador"
         }
     });

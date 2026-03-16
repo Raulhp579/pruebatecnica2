@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Rol;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,10 +15,20 @@ class User_RolFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    public $id = 0;
+    public function incrementarId (){
+        $this->id ++;
+
+        return $this->id;
+    }
+
     public function definition(): array
     {
         return [
-            //
+            "id_rol"=>Rol::all()->random()->id,
+            "id_user"=> $this->incrementarId()
         ];
     }
 }
+
