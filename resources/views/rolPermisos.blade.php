@@ -16,7 +16,7 @@
 @section('content')
     <div class="row">
         <!-- Tarjeta de Roles -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card card-primary">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
@@ -51,37 +51,7 @@
             <!-- /.card -->
         </div>
 
-        <!-- Tarjeta de Permisos -->
-        <div class="col-md-6">
-            <div class="card card-secondary">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">Permisos Disponibles</h3>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap table-striped" id="tablaPermisos">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Permiso</th>
-                                <th>Descripción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaPermisosBody">
-                            <tr>
-                                <td colspan="3" class="text-center py-4">
-                                    <i class="fas fa-spinner fa-spin text-primary"></i> Cargando permisos...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-        </div>
+
     </div>
 
     <!-- Modal Añadir Rol -->
@@ -146,11 +116,11 @@
     </div>
 
     <!-- Modal Gestionar Permisos (Asignar a Rol) -->
-    <div class="modal fade" id="modalGestionarPermisos" tabindex="-1" role="dialog" aria-labelledby="modalGestionarPermisosLabel" aria-hidden="true">
+    <div class="modal fade" id="modalPermisos" tabindex="-1" role="dialog" aria-labelledby="modalPermisosLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title" id="modalGestionarPermisosLabel">Gestionar Permisos del Rol: <span id="nombreRolAsignar" class="font-weight-bold"></span></h5>
+                    <h5 class="modal-title" id="modalPermisosLabel">Gestionar Permisos del Rol: <span id="nombreRolAsignar" class="font-weight-bold"></span></h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

@@ -41,7 +41,7 @@ Route::get('/registro', function () {
 })->name('registro');
 
 Route::get("/rolPermisos", function () {
-    return view('rolPermisos');
+    return view('rolPermisos',["permisos"=>Permiso::all()]);
 });
 
 /* Route::get('/pruebaRol/{id}', [UserController::class, 'pruebaRol']); */

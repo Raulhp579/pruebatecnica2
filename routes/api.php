@@ -9,12 +9,12 @@ use App\Http\Controllers\ProyectoController;
 use App\Http\Controllers\TareaController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\RolController;
 use App\Http\Middleware\puedeBorrarMiddleware;
 use App\Http\Middleware\puedeCrearMiddleware;
 use App\Http\Middleware\puedeEditarMiddleware;
 use App\Http\Middleware\puedeVerMiddleware;
-use Illuminate\Container\Attributes\Auth;
 
 Route::get('/userInfoRol', function (Request $request) {
     return response()->json($request->user()->rol->id_rol);
@@ -30,6 +30,8 @@ Route::get('/userInfo', function (Request $request) {
 Route::middleware(isAdminMiddleware::class, "auth:sanctum")->group(function () {
     Route::apiResource('/user', UserController::class);
     Route::apiResource('/rol',RolController::class);
+    Route::apiResource('/permiso',PermisoController::class);
+    Route::post('/asociarPermisoRol', [RolController::class, 'asociarPermisoRol']);
 });
 
 

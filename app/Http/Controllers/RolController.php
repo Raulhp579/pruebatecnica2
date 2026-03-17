@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rol;
 use App\Models\Rol_Permiso;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class RolController extends Controller
 {
@@ -13,7 +14,19 @@ class RolController extends Controller
      */
     public function index()
     {
-        return response()->json(Rol::all());
+        $model = Rol::query();
+
+        return DataTables::eloquent($model)
+            ->addColumn('id', function ($row) {
+                return $row->id;
+            })
+            ->addColumn('nombre', function ($row) {
+                return $row->nombre;
+            })
+            ->addColumn('descripcion', function ($row) {
+                return $row->descripcion;
+            })
+            ->make(true);
     }
 
     /**
@@ -37,7 +50,7 @@ class RolController extends Controller
      */
     public function show(string $id)
     {
-        $rol = Rol::where("id",$id)->first();
+        $rol = Rol::with('permisos')->where("id",$id)->first();
 
         if(!$rol){
             return response()->json([
@@ -92,16 +105,25 @@ class RolController extends Controller
     }
 
     public function asociarPermisoRol(Request $request){
-        $rol_permiso = new Rol_Permiso();
-        $rol_permiso->id_rol = $request->id_rol;
-        $rol_permiso->id_permiso = $request->id_permiso;
+        $id_rol = $request->id_rol;
+        $id_permisos = $request->id_permisos; // Array of IDs
 
-        $rol_permiso->save();
+        if (!is_array($id_permisos)) {
+            $id_permisos = [];
+        }
+
+        // Delete existing for this role to sync
+        Rol_Permiso::where('id_rol', $id_rol)->delete();
+
+        foreach ($id_permisos as $id_permiso) {
+            $rol_permiso = new Rol_Permiso();
+            $rol_permiso->id_rol = $id_rol;
+            $rol_permiso->id_permiso = $id_permiso;
+            $rol_permiso->save();
+        }
 
         return response()->json([
-            "success"=>"permiso asociado al rol correctamente"
+            "success"=>"permisos asociados al rol correctamente"
         ]);
-
-        
     }
 }

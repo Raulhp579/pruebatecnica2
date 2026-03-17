@@ -204,7 +204,7 @@
         </thead>
         <tbody>
             @php $totalMinutos = 0; @endphp
-            @forelse($tareas as $i => $tarea)
+            @foreach ($tareas as $i => $tarea)
                 @php
                     $inicio = \Carbon\Carbon::parse($tarea->tiempo_inicio);
                     $fin    = \Carbon\Carbon::parse($tarea->tiempo_fin);

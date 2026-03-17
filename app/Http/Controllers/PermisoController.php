@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Permiso;
 use Exception;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class PermisoController extends Controller
 {
@@ -14,7 +15,24 @@ class PermisoController extends Controller
     public function index()
     {
         try{
-            return response()->json(Permiso::all());
+            $model = Permiso::query();
+
+            return DataTables::eloquent($model)
+                ->addColumn("id", function($row){
+                    return $row->id;
+                })
+                ->addColumn("tipo_permiso", function($row){
+                    if($row->tipo_permiso == 0){
+                        return "Ver todas las tareas";
+                    }else if($row->tipo_permiso == 1){
+                        return "Crear tareas";
+                    }else if($row->tipo_permiso == 2){
+                        return "Editar tareas";
+                    }else if($row->tipo_permiso == 3){
+                        return "Borrar tareas";
+                    }
+                })
+                ->make(true);
         }catch(Exception $e){
             return response()->json([
                 "error"=>"error al mostrar los permisos",
