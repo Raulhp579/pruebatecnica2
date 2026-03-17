@@ -88,11 +88,26 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group d-flex flex-column">
                             <label for="edit_Permiso">Asignar Permiso</label>
                             <select name="edit_Permiso" id="edit_Permiso">
                                 @foreach ($permisos as $permiso)
-                                    <option value={{ $permiso->id }}>{{$permiso->tipo_permiso}}</option>
+                                <option value={{ $permiso->id }}>
+                                    @if($permiso->tipo_permiso == 0)
+                                        Ver todas las tareas
+                                    @endif
+                                    @if($permiso->tipo_permiso == 1)
+                                        crear Tareas
+                                    @endif
+                                    @if($permiso->tipo_permiso == 2)
+                                        editar tareas
+                                    @endif
+                                    @if($permiso->tipo_permiso == 3)
+                                        borrar tareas
+                                    @endif
+                                </option>
+
+
                                 @endforeach
                             </select>
 

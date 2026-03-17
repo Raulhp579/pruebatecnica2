@@ -31,6 +31,12 @@ class SideNavSeeder extends Seeder
         ]);
 
         SideNav::create([
+            'text' => 'RolPermisos',
+            'url' => 'rolPermisos',
+            'icon' => 'fas fa-fw fa-project-diagram',
+        ]);
+
+        SideNav::create([
             'header' => 'account_settings',
         ]);
 

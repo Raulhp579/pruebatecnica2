@@ -40,6 +40,10 @@ Route::get('/registro', function () {
     return view('registro');
 })->name('registro');
 
+Route::get("/rolPermisos", function () {
+    return view('rolPermisos');
+});
+
 /* Route::get('/pruebaRol/{id}', [UserController::class, 'pruebaRol']); */
 
 require __DIR__.'/auth.php';

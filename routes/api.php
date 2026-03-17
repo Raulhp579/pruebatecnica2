@@ -9,6 +9,7 @@ use App\Http\Controllers\ProyectoController;
 use App\Http\Controllers\TareaController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\RolController;
 use App\Http\Middleware\puedeBorrarMiddleware;
 use App\Http\Middleware\puedeCrearMiddleware;
 use App\Http\Middleware\puedeEditarMiddleware;
@@ -27,7 +28,8 @@ Route::get('/userInfo', function (Request $request) {
 
 //grupo de rutas en las que debes de estar autenticado y siendo admin
 Route::middleware(isAdminMiddleware::class, "auth:sanctum")->group(function () {
-    Route::apiResource('user', UserController::class);
+    Route::apiResource('/user', UserController::class);
+    Route::apiResource('/rol',RolController::class);
 });
 
 
