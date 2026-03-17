@@ -82,13 +82,9 @@ const cargarTabla = () => {
             retrieve: true,
             dom: '<"d-flex justify-content-between align-items-center flex-wrap px-2 pt-2"lf>t<"d-flex justify-content-between align-items-center flex-wrap p-2"ip>',
             initComplete: function () {
-                $(".dataTables_length select")
-                    .addClass("custom-select custom-select-sm d-inline-block mx-1"); 
-                $(".dataTables_filter input")
-                    .addClass(
-                        "form-control form-control-sm d-inline-block ml-1",
-                    )
-                    .css("width", "auto");
+                // Adaptamos DataTables 2 a Bootstrap 4 (AdminLTE)
+                $(".dt-input").addClass("form-control form-control-sm d-inline-block mx-1");
+                $("select.dt-input").addClass("custom-select custom-select-sm").css({ "width": "auto", "min-width": "65px", "padding-right": "24px" });
             },
             columns: [
                 {
