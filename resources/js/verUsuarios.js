@@ -105,8 +105,6 @@ async function cargarUsuarios() {
     });
     const data = await response.json();
 
-    console.log(data.data);
-
     cargarTabla(data.data);
 }
 
