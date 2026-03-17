@@ -37,7 +37,11 @@ class UserController extends Controller
                 })
                 ->addColumn('administrador', function ($row) {
                     if ($row->rol) {
-                        return $row->rol->id_rol;
+                        if($row->rol->id_rol == 1){
+                            return "Es administrador";
+                        }else{
+                            return "No es administrador";
+                        }
                     }
 
                     return 'Sin rol asignado';

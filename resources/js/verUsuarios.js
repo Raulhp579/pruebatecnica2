@@ -55,7 +55,13 @@ const cargarTabla = (data) => {
         //Enlazando tabla con datos AJAX
         const table = $("#tablaUsuarios").DataTable({
             language: lang,
-            data: data,
+            ajax:{
+                url:"/api/user",
+                headers:{
+                    'Authorization':`Bearer ${localStorage.getItem("AuthToken")}`
+                },
+                dataSrc:"data"
+            },
             columns: [
                 {
                     data: "id",
