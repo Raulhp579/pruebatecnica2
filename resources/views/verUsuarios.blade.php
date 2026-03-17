@@ -89,29 +89,21 @@
                         </div>
 
                         <div class="form-group d-flex flex-column">
-                            <label for="edit_Permiso">Asignar Permiso</label>
-                            <select name="edit_Permiso" id="edit_Permiso">
-                                @foreach ($permisos as $permiso)
-                                <option value={{ $permiso->id }}>
-                                    @if($permiso->tipo_permiso == 0)
-                                        Ver todas las tareas
-                                    @endif
-                                    @if($permiso->tipo_permiso == 1)
-                                        crear Tareas
-                                    @endif
-                                    @if($permiso->tipo_permiso == 2)
-                                        editar tareas
-                                    @endif
-                                    @if($permiso->tipo_permiso == 3)
-                                        borrar tareas
-                                    @endif
-                                </option>
-
-
+                            <label for="edit_rol">Asignar Rol</label>
+                            <select name="edit_rol" id="edit_rol">
+                                @foreach ($roles as $rol){
+                                    <option value={{ $rol->id }}>{{ $rol->nombre }}</option>
+                                }
                                 @endforeach
                             </select>
+                            <button type="button" class="btn btn-primary mt-2" id="btnGuardarRol">Asignar Rol</button>
+                        </div>
 
-                            <button type="button" class="btn btn-primary mt-2" id="btnGuardarPermiso">Asignar permiso</button>
+                        <div class="form-group">
+                            <label>Roles Asignados</label>
+                            <div id="listaRolesUsuario" class="d-flex flex-wrap p-2 border rounded" style="min-height: 40px; gap: 8px;">
+                                <!-- Se cargarán dinámicamente -->
+                            </div>
                         </div>
 
 

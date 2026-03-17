@@ -109,15 +109,79 @@ async function cargarUsuarios() {
 }
 
 // Llenamos el modal con los datos del usuario correspondiente y lo mostramos
-function abrirModalEditar(user) {
+async function abrirModalEditar(user) {
     document.getElementById("edit_id").value = user.id;
     document.getElementById("edit_name").value = user.name;
     document.getElementById("edit_email").value = user.email;
     document.getElementById("edit_password").value = ""; // La contraseña siempre en blanco por seguridad
-    document.getElementById("edit_administrador").checked = user.administrador;
+    
+    // Si viene como string de la tabla de listado
+    const esAdmin = typeof user.administrador === "string" 
+        ? user.administrador === "Es administrador" 
+        : user.administrador === 1;
+        
+    document.getElementById("edit_administrador").checked = esAdmin;
 
-    // Usamos jQuery (que viene incluido en AdminLTE) para mostrar el modal de Bootstrap
+    const container = document.getElementById("listaRolesUsuario");
+    container.innerHTML = '<p class="text-muted mb-0"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
+
+    try {
+        const response = await fetch(`/api/getUserRol/${user.id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("AuthToken")}`
+            }
+        });
+        const roles = await response.json();
+        container.innerHTML = "";
+
+        if (roles.length === 0) {
+            container.innerHTML = '<p class="text-muted mb-0">Sin roles asignados.</p>';
+        } else {
+            roles.forEach(r => {
+                const badge = document.createElement("span");
+                badge.className = "badge bg-info d-flex align-items-center px-2 py-1 mr-1 mb-1";
+                badge.style.gap = "5px";
+                badge.style.fontSize = "12px";
+                const rolNombre = r.rol ? r.rol.nombre : `Rol #${r.id_rol}`;
+                badge.innerHTML = `${rolNombre} <i class="fas fa-trash-alt text-danger btn-eliminar-rol ml-1" style="cursor: pointer;" data-idrol="${r.id_rol}"></i>`;
+                container.appendChild(badge);
+            });
+
+            container.querySelectorAll(".btn-eliminar-rol").forEach(btn => {
+                btn.addEventListener("click", async (e) => {
+                    const idRol = e.target.getAttribute("data-idrol");
+                    if (confirm(`¿Seguro que deseas quitar el rol?`)) {
+                        await desasociarRol(user.id, idRol);
+                        abrirModalEditar(user); // Recargar la lista
+                    }
+                });
+            });
+        }
+    } catch (error) {
+        container.innerHTML = '<span class="text-danger">Error al cargar roles.</span>';
+    }
+
+    // Usamos jQuery para mostrar el modal
     window.$("#modalEditarUsuario").modal("show");
+}
+
+async function desasociarRol(idUsuario, idRol) {
+    const datos = {
+        id_user: idUsuario,
+        id_rol: idRol
+    };
+
+    const response = await fetch("/api/desasociarRolUsuario", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem("AuthToken")}`
+        },
+        body: JSON.stringify(datos)
+    });
+
+    const data = await response.json();
+    console.log("Respuesta desasociar:", data);
 }
 
 // Evento para el botón de Guardar Cambios dentro del modal
@@ -226,116 +290,36 @@ btnAñadirUsuario.addEventListener("click", async (e) => {
 });
 
 
-const btnAsignarPermiso = document.querySelector("#btnGuardarPermiso")
+const btnGuardarRol = document.querySelector("#btnGuardarRol")
 
-btnAsignarPermiso.addEventListener("click", () => {
+btnGuardarRol.addEventListener("click", async () => {
     const idUsuario = document.getElementById("edit_id").value;
-    const idPermiso = document.querySelector("#edit_Permiso").value
+    const idRol = document.querySelector("#edit_rol").value
 
     const datos = {
         id_user : idUsuario,
-        id_permiso : idPermiso
+        id_rol : idRol
     }
 
-    const response = fetch("/api/asociarPermisoUsuario",{
+    console.log(datos)
+
+    const response =await fetch("/api/asociarRolUsuario",{
         method:'POST',
         headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${localStorage.getItem("AuthToken")}`
         },
         body:JSON.stringify(datos)
     })
 
-    const data = response.json();
+    const data = await response.json();
+    console.log(data);
 
-    console.log(data)
-
+    // Recargar la lista de roles en el modal
+    abrirModalEditar({
+        id: idUsuario,
+        administrador: document.getElementById("edit_administrador").checked ? "Es administrador" : "No es administrador",
+        name: document.getElementById("edit_name").value,
+        email: document.getElementById("edit_email").value
+    });
 })
-
-// filtroNombre.addEventListener("change", async () => {
-//     const nombre = filtroNombre.value
-
-//     cargarUsuarios(nombre)
-
-// })
-
-/*    try {
-
-
-
-       var table = $('#example').DataTable({
-           data: data,
-           columns: [{
-                   data: 'name'
-               }, {
-                   data: 'position'
-               }, {
-                   data: 'salary'
-               }, {
-                   data: 'office',
-               },
-               {
-                   data: null,
-                   render: function (data, type, row, meta) {
-                       return '<a id="btnEdit" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>';
-                   }
-               }
-           ],
-       });
-
-       const tbody = document.getElementById("tablaUsuariosBody");
-       tbody.innerHTML = "";
-
-       // Iteramos los usuarios devueltos
-       data.forEach((user) => {
-           const tr = document.createElement("tr");
-
-           const adminBadge = user.administrador
-               ? '<span class="badge bg-success">Sí</span>'
-               : '<span class="badge bg-danger">No</span>';
-
-           const fecha = user.created_at
-               ? new Date(user.created_at).toLocaleDateString("es-ES")
-               : "N/A";
-
-           tr.innerHTML = `
-               <td>${user.id}</td>
-               <td>${user.name}</td>
-               <td>${user.email}</td>
-               <td>${adminBadge}</td>
-               <td>${fecha}</td>
-               <td>
-                   <!-- Usamos clases en lugar de IDs para que no se pisen -->
-                   <button class="btn btn-primary btn-sm btn-editar" data-id="${user.id}">Editar</button>
-                   <button class="btn btn-danger btn-sm btn-eliminar" data-id="${user.id}">Eliminar</button>
-               </td>
-           `;
-
-           // Evento para Editar
-           const btnEditarLocal = tr.querySelector(".btn-editar");
-           btnEditarLocal.addEventListener("click", () => {
-               abrirModalEditar(user);
-           });
-
-           // Evento para Eliminar
-           const btnEliminarLocal = tr.querySelector(".btn-eliminar");
-           btnEliminarLocal.addEventListener("click", async () => {
-               if (
-                   confirm("¿Seguro que deseas eliminar a " + user.name + "?")
-               ) {
-                   await eliminarUsuario(user.id);
-               }
-           });
-
-           tbody.appendChild(tr);
-       });
-
-       if (data.length === 0) {
-           tbody.innerHTML =
-               '<tr><td colspan="6" class="text-center text-muted">No hay usuarios registrados.</td></tr>';
-       }
-   } catch (error) {
-       console.error("Error obteniendo usuarios:", error);
-       const tbody = document.getElementById("tablaUsuariosBody");
-       tbody.innerHTML =
-           '<tr><td colspan="6" class="text-center text-danger">Error al cargar los usuarios.</td></tr>';
-   } */

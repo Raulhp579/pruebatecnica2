@@ -108,11 +108,19 @@ class UserController extends Controller
 
         $user->name = $request->nombre;
         $user->email = $request->correo;
-        $user->password = Hash::make($request->contrasena);
+
+        if ($request->has('contrasena') && !empty($request->contrasena)) {
+            $user->password = Hash::make($request->contrasena);
+        }
 
         $user->save();
 
         $user_Rol = User_Rol::where('id_user', $id)->first();
+
+        if (!$user_Rol) {
+            $user_Rol = new User_Rol();
+            $user_Rol->id_user = $id;
+        }
 
         $user_Rol->id_rol = $request->esAdmin;
 
@@ -161,7 +169,35 @@ class UserController extends Controller
             "success"=>"se ha asociado correctamente el permiso al usuario"
         ]);
     }
+
+    public function asociarRolUsuario(Request $request){
+        $user_rol = new User_Rol();
+
+        $user_rol->id_user = $request->id_user;
+        $user_rol->id_rol = $request->id_rol;
+
+        $user_rol->save();
+
+        return response()->json([
+            "success"=>"se ha asociado correctamente el rol al usuario"
+        ]);
+    }
     
+
+    public function getRolesUser(string $id){
+        $user_rol = User_Rol::with('rol')->where('id_user', $id)->get();
+        return response()->json($user_rol);
+    }
+
+    public function desasociarRolUsuario(Request $request){
+        User_Rol::where('id_user', $request->id_user)
+                ->where('id_rol', $request->id_rol)
+                ->delete();
+
+        return response()->json([
+            "success"=>"se ha desasociado el rol correctamente"
+        ]);
+    }
 
 /*     public function pruebaRol(string $id)
     {

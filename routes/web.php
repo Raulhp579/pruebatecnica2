@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use App\Models\Permiso;
 use App\Models\Proyecto;
+use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -20,8 +21,7 @@ Route::get('/dashboard', function () {
 
 Route::view('/crearUsuario', 'crearUsuario');
 Route::get('verUsuarios', function () {
-    $permisos  = Permiso::all();
-    return view('verUsuarios', ["permisos"=>$permisos]);
+    return view('verUsuarios', ['roles'=>Rol::all()]);
 });
 
 Route::get('proyectos', function () {

@@ -83,10 +83,7 @@ const cargarTabla = () => {
             dom: '<"d-flex justify-content-between align-items-center flex-wrap px-2 pt-2"lf>t<"d-flex justify-content-between align-items-center flex-wrap p-2"ip>',
             initComplete: function () {
                 $(".dataTables_length select")
-                    .addClass(
-                        "custom-select custom-select-sm d-inline-block mx-1",
-                    )
-                    .css("width", "auto");
+                    .addClass("custom-select custom-select-sm d-inline-block mx-1"); 
                 $(".dataTables_filter input")
                     .addClass(
                         "form-control form-control-sm d-inline-block ml-1",
@@ -191,7 +188,6 @@ btnAgregarRol.addEventListener("click", async () => {
     window.$("#modalAgregarRol").modal("hide");
 });
 
-
 const borrarRol = async (id) => {
     const response = await fetch(`/api/rol/${id}`, {
         method: "DELETE",
@@ -204,7 +200,6 @@ const borrarRol = async (id) => {
 
     console.log(data);
 };
-
 
 ////////PERMISOS////////
 
@@ -272,9 +267,7 @@ const cargarTablaPermisos = () => {
                 {
                     data: null,
                     render: function (data, type, row, meta) {
-                        return (
-                            '<a class="btn btn-sm btn-success btnEditPermiso" style="margin-right: 5px; cursor: pointer;"><i class="fa fa-key"></i></a>'
-                        );
+                        return '<a class="btn btn-sm btn-success btnEditPermiso" style="margin-right: 5px; cursor: pointer;"><i class="fa fa-key"></i></a>';
                     },
                 },
             ],
@@ -285,10 +278,8 @@ const cargarTablaPermisos = () => {
             var data = tablePermisos.row($(this).closest("tr")).data();
             if (data) abrirModalPermisos(data["id"]);
         });
-
     });
 };
-
 
 const abrirModalPermisos = async (id) => {
     window.$("#modalPermisos").modal("show");
@@ -298,33 +289,38 @@ const abrirModalPermisos = async (id) => {
     document.querySelector("#asignar_rol_id").value = id;
 
     // Obtener los permisos que ya tiene el rol
-    const activePermisos = datosBase.permisos.map(p => p.id_permiso);
-    document.querySelectorAll(".checkbox-permiso").forEach(cb => {
+    const activePermisos = datosBase.permisos.map((p) => p.id_permiso);
+    document.querySelectorAll(".checkbox-permiso").forEach((cb) => {
         cb.checked = activePermisos.includes(parseInt(cb.value));
     });
 
-    window.$("#btnGuardarPermisosRol").off("click").on("click", async () => {
-        const checkedPermisos = [];
-        document.querySelectorAll(".checkbox-permiso:checked").forEach(cb => {
-            checkedPermisos.push(parseInt(cb.value));
+    window
+        .$("#btnGuardarPermisosRol")
+        .off("click")
+        .on("click", async () => {
+            const checkedPermisos = [];
+            document
+                .querySelectorAll(".checkbox-permiso:checked")
+                .forEach((cb) => {
+                    checkedPermisos.push(parseInt(cb.value));
+                });
+
+            const datos = {
+                id_rol: id,
+                id_permisos: checkedPermisos,
+            };
+
+            const response = await fetch("/api/asociarPermisoRol", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
+                },
+                body: JSON.stringify(datos),
+            });
+
+            const data = await response.json();
+            console.log(data);
+            window.$("#modalPermisos").modal("hide");
         });
-
-        const datos = {
-            id_rol: id,
-            id_permisos: checkedPermisos,
-        };
-
-        const response = await fetch("/api/asociarPermisoRol", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
-            },
-            body: JSON.stringify(datos),
-        });
-
-        const data = await response.json();
-        console.log(data);
-        window.$("#modalPermisos").modal("hide");
-    });
 };

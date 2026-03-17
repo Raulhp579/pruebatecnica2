@@ -32,6 +32,9 @@ Route::middleware(isAdminMiddleware::class, "auth:sanctum")->group(function () {
     Route::apiResource('/rol',RolController::class);
     Route::apiResource('/permiso',PermisoController::class);
     Route::post('/asociarPermisoRol', [RolController::class, 'asociarPermisoRol']);
+    Route::post('/asociarRolUsuario', [UserController::class, 'asociarRolUsuario']);
+    Route::post('/desasociarRolUsuario', [UserController::class, 'desasociarRolUsuario']);
+    
 });
 
 
@@ -77,3 +80,4 @@ Route::post('/registro',[AuthController::class, "register"]);
 
 
 Route::post("/asociarPermisoUsuario",[UserController::class, "asociarPermisoUser"]);
+Route::get("/getUserRol/{id}", [UserController::class, "getRolesUser"]);
