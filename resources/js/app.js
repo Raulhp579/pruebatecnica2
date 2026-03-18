@@ -11,8 +11,10 @@ Alpine.start();
 
 const usuariosNav = document.querySelector("#usuariosNav");
 const perfilNav = document.querySelector("#perfilNav");
+const rolPermisosNav = document.querySelector("#rolPermisosNav");
 usuariosNav.style.display = "none";
 perfilNav.style.display = "none";
+rolPermisosNav.style.display = "none";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const userRol = await getUserRol();
@@ -20,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (userRol == 1) {
         usuariosNav.style.display = "";
+        rolPermisosNav.style.display = "";
     }
 
     if (userRol) {

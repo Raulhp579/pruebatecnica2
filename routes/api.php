@@ -34,6 +34,8 @@ Route::middleware(isAdminMiddleware::class, "auth:sanctum")->group(function () {
     Route::post('/asociarPermisoRol', [RolController::class, 'asociarPermisoRol']);
     Route::post('/asociarRolUsuario', [UserController::class, 'asociarRolUsuario']);
     Route::post('/desasociarRolUsuario', [UserController::class, 'desasociarRolUsuario']);
+    Route::post("/asociarPermisoUsuario",[UserController::class, "asociarPermisoUser"]);
+    Route::get("/getUserRol/{id}", [UserController::class, "getRolesUser"]);
     
 });
 
@@ -76,8 +78,7 @@ Route::middleware("auth:sanctum", puedeBorrarMiddleware::class)->group(function 
 
 Route::get("/login", [AuthController::class, "login"]);
 Route::post('/registro',[AuthController::class, "register"]);
+Route::get('/tareasProyecto/{id}', [TareaController::class, "getByIdProyecto"]);
 
 
 
-Route::post("/asociarPermisoUsuario",[UserController::class, "asociarPermisoUser"]);
-Route::get("/getUserRol/{id}", [UserController::class, "getRolesUser"]);

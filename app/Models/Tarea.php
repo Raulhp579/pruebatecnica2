@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Estado;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
@@ -16,9 +17,13 @@ class Tarea extends Model
         'tiempo_fin',
         'proyecto_id',
         'id_user',
-        'prioridad'
+        'prioridad',
+        'estado',
     ];
 
+    protected $casts = [
+        'estado' => Estado::class,
+    ];
     // Relación: Una tarea pertenece a un proyecto
     public function proyecto()
     {

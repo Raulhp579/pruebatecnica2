@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Proyecto;
 use App\Models\User;
 use App\Models\User_Rol;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]); */
 
+        Proyecto::factory(100)->create();
         $this->call(UserSeeder::class);
         $this->call(RolSeeder::class);
         /* User_Rol::factory(100)->create(); */

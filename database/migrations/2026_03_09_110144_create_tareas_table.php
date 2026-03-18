@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('prioridad');
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->string('estado')->nullable();
             $table->timestamps();
         });
     }

@@ -301,6 +301,10 @@ async function cargarListaProyectos() {
                         window.miCalendario.refetchEvents();
                     }
                 });
+
+                div.addEventListener("dblclick", () => {
+                    window.location.href = `/tareasProyecto?id=${p.id}`;
+                })
             });
 
             // Inicializar Draggable de FullCalendar para este contenedor

@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Models\Permiso;
 use App\Models\Proyecto;
 use App\Models\Rol;
+use App\Models\Tarea;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,11 @@ Route::get('/registro', function () {
 
 Route::get("/rolPermisos", function () {
     return view('rolPermisos',["permisos"=>Permiso::all()]);
+});
+
+
+Route::get("/tareasProyecto", function () {
+    return view('tareasProyecto');
 });
 
 /* Route::get('/pruebaRol/{id}', [UserController::class, 'pruebaRol']); */

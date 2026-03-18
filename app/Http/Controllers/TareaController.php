@@ -41,6 +41,7 @@ class TareaController extends Controller
         $tarea->proyecto_id = $request->proyecto_id;
         $tarea->prioridad = $request->prioridad;
         $tarea->id_user = $request->id_user;
+        $tarea->estado = $request->estado;
 
         $tarea->save();
 
@@ -106,11 +107,24 @@ class TareaController extends Controller
             return response()->json($tareas);
         }catch(Exception $e){
             return response()->json([
-                "error"=>"Ha ocurrido un error mostrando las tareas"
+                "error"=>"Ha ocurrido un error mostrando las tareas",
+                "fail"=>$e->getMessage()
             ]);
         }
 
 
 
+    }
+
+    public function getByIdProyecto(string $id){
+        try{
+            $tareas = Tarea::where("proyecto_id", $id)->get();
+            return response()->json($tareas);
+        }catch(Exception $e){
+            return response()->json([
+                "error"=>"Ha ocurrido un error mostrando las tareas",
+                "fail"=>$e->getMessage()
+            ]);
+        }
     }
 }

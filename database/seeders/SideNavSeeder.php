@@ -34,6 +34,7 @@ class SideNavSeeder extends Seeder
             'text' => 'RolPermisos',
             'url' => 'rolPermisos',
             'icon' => 'fas fa-fw fa-user-lock',
+            'id_html'=> 'rolPermisosNav',
         ]);
 
         SideNav::create([
