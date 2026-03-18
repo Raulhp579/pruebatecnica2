@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Enums\Estado;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
 class Tarea extends Model
 {
+    use HasFactory;
     protected $table = "tareas";
     protected $primaryKey = 'id';
 

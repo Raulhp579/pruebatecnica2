@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PermisoSeeder::class);
         $this->call(Rol_PermisoSeeder::class);
         $this->call(User_PermisoSeeder::class);
+        $this->call(TareaSeeder::class);
 
     }
 }
